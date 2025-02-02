@@ -1,56 +1,78 @@
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { FinancialMetrics } from "@/components/dashboard/FinancialMetrics";
-import { RecommendationCard } from "@/components/dashboard/RecommendationCard";
+import { RecommendationsList } from "@/components/recommendations/RecommendationsList";
+import { Loader2 } from "lucide-react";
 
 const Dashboard = () => {
-  // This would typically come from your API based on user data analysis
-  const recommendations = [
-    {
-      title: "Start an Emergency Fund",
-      description:
-        "Based on your income, we recommend saving 3-6 months of expenses.",
-      type: "Savings",
-      action: "Set up automatic transfers",
+  const { data: profile, isLoading: isLoadingProfile } = useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      console.log("Fetching user profile...");
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No session found");
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching profile:", error);
+        throw error;
+      }
+
+      console.log("Profile data:", data);
+      return data;
     },
-    {
-      title: "Consider GIC Investment",
-      description:
-        "With current rates at 4.5%, GICs offer a safe way to grow your savings.",
-      type: "Investment",
-      action: "Learn more",
+  });
+
+  const { data: bankAccounts, isLoading: isLoadingAccounts } = useQuery({
+    queryKey: ["bankAccounts"],
+    queryFn: async () => {
+      console.log("Fetching bank accounts...");
+      const { data, error } = await supabase
+        .from("bank_accounts")
+        .select(`
+          *,
+          transactions(*)
+        `);
+
+      if (error) {
+        console.error("Error fetching bank accounts:", error);
+        throw error;
+      }
+
+      console.log("Bank accounts data:", data);
+      return data;
     },
-    {
-      title: "Optimize Your Spending",
-      description:
-        "We've identified potential savings in your monthly subscriptions.",
-      type: "Budgeting",
-      action: "Review subscriptions",
-    },
-  ];
+  });
+
+  if (isLoadingProfile || isLoadingAccounts) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
       <div className="space-y-2">
-        <h1 className="text-4xl font-bold">Financial Dashboard</h1>
+        <h1 className="text-4xl font-bold">Welcome, {profile?.full_name}</h1>
         <p className="text-muted-foreground">
           Track your progress and get personalized recommendations
         </p>
       </div>
 
-      <FinancialMetrics />
+      <FinancialMetrics
+        monthlyIncome={profile?.monthly_income || 0}
+        monthlyExpenses={profile?.monthly_expenses || 0}
+        bankAccounts={bankAccounts || []}
+      />
 
-      <div className="space-y-4">
-        <h2 className="text-2xl font-semibold">
-          Personalized Recommendations
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {recommendations.map((recommendation, index) => (
-            <RecommendationCard
-              key={index}
-              recommendation={recommendation}
-            />
-          ))}
-        </div>
-      </div>
+      <RecommendationsList />
     </div>
   );
 };

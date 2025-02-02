@@ -9,6 +9,72 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      bank_accounts: {
+        Row: {
+          account_name: string
+          account_type: string
+          balance: number
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          account_name: string
+          account_type: string
+          balance?: number
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          account_name?: string
+          account_type?: string
+          balance?: number
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          age: number
+          created_at: string
+          financial_goals: string | null
+          full_name: string
+          id: string
+          investment_horizon: string | null
+          monthly_expenses: number | null
+          monthly_income: number | null
+          occupation: string
+          risk_tolerance: string | null
+        }
+        Insert: {
+          age: number
+          created_at?: string
+          financial_goals?: string | null
+          full_name: string
+          id: string
+          investment_horizon?: string | null
+          monthly_expenses?: number | null
+          monthly_income?: number | null
+          occupation: string
+          risk_tolerance?: string | null
+        }
+        Update: {
+          age?: number
+          created_at?: string
+          financial_goals?: string | null
+          full_name?: string
+          id?: string
+          investment_horizon?: string | null
+          monthly_expenses?: number | null
+          monthly_income?: number | null
+          occupation?: string
+          risk_tolerance?: string | null
+        }
+        Relationships: []
+      }
       recommendations: {
         Row: {
           created_at: string
@@ -38,6 +104,44 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          bank_account_id: string
+          category: string | null
+          date: string
+          description: string | null
+          id: string
+          transaction_type: string
+        }
+        Insert: {
+          amount: number
+          bank_account_id: string
+          category?: string | null
+          date?: string
+          description?: string | null
+          id?: string
+          transaction_type: string
+        }
+        Update: {
+          amount?: number
+          bank_account_id?: string
+          category?: string | null
+          date?: string
+          description?: string | null
+          id?: string
+          transaction_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_bank_account_id_fkey"
+            columns: ["bank_account_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
