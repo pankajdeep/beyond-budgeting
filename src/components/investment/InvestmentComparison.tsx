@@ -13,40 +13,47 @@ import { BarChart } from "lucide-react";
 
 const investmentTypes = [
   {
-    type: "Stocks",
-    risk: "High",
-    roi: "10-15%",
-    liquidity: "High",
-    growth: "High",
-    description: "Direct ownership in companies",
-  },
-  {
-    type: "Mutual Funds",
-    risk: "Medium",
-    roi: "8-12%",
-    liquidity: "Medium",
-    growth: "Medium",
-    description: "Professionally managed investment pools",
-  },
-  {
-    type: "Bonds",
+    type: "Sun Life Granite Conservative Portfolio",
     risk: "Low",
     roi: "4-6%",
     liquidity: "Medium",
     growth: "Low",
-    description: "Fixed-income debt securities",
+    description: "Conservative mix of fixed income and equity investments for stable returns",
   },
   {
-    type: "ETFs",
+    type: "Sun Life Granite Balanced Portfolio",
     risk: "Medium",
-    roi: "8-12%",
-    liquidity: "High",
+    roi: "6-8%",
+    liquidity: "Medium",
     growth: "Medium",
-    description: "Exchange-traded investment funds",
+    description: "Balanced mix of Canadian and global investments for moderate growth",
+  },
+  {
+    type: "Sun Life MFS Global Growth Fund",
+    risk: "High",
+    roi: "8-12%",
+    liquidity: "Medium",
+    growth: "High",
+    description: "Global equity fund focused on long-term capital appreciation",
+  },
+  {
+    type: "Sun Life Money Market Fund",
+    risk: "Low",
+    roi: "2-3%",
+    liquidity: "High",
+    growth: "Low",
+    description: "High-quality money market instruments for capital preservation",
+  },
+  {
+    type: "Sun Life Global Dividend Fund",
+    risk: "Medium",
+    roi: "6-8%",
+    liquidity: "Medium",
+    growth: "Medium",
+    description: "Global dividend-paying equities for income and growth",
   },
 ];
 
-// Define metrics as a regular array instead of a readonly tuple
 const metrics = ["risk", "roi", "liquidity", "growth"] as const;
 type MetricType = typeof metrics[number];
 
@@ -65,7 +72,7 @@ export const InvestmentComparison = () => {
     <div className="space-y-6 animate-fadeIn delay-300">
       <div className="flex items-center gap-2">
         <BarChart className="h-6 w-6 text-primary" />
-        <h2 className="text-2xl font-bold">Investment Types Comparison</h2>
+        <h2 className="text-2xl font-bold">Investment Portfolio Comparison</h2>
       </div>
 
       <div className="flex flex-wrap gap-4">
