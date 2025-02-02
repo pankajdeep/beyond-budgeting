@@ -84,29 +84,30 @@ export const SuggestedPlans = () => {
               <div className="flex justify-between items-start">
                 <div>
                   <CardTitle>{plan.name}</CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
+                  <CardDescription className="text-sm">{plan.description}</CardDescription>
                 </div>
-                <Badge variant={
-                  plan.risk === "High" ? "destructive" : 
-                  plan.risk === "Moderate" ? "secondary" : 
-                  "outline"
-                }>
+                <Badge 
+                  variant={
+                    plan.risk === "High" ? "destructive" : 
+                    plan.risk === "Moderate" ? "secondary" : 
+                    "outline"
+                  }
+                  className={`text-center px-3 ${plan.risk === "Moderate" ? "text-white" : ""}`}
+                >
                   {plan.risk} Risk
                 </Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-4">
-                {/* Risk Tolerance Section */}
-                <div className="flex items-center gap-2 text-sm">
+              <div className="space-y-4 text-sm">
+                <div className="flex items-center gap-2">
                   {plan.risk === "Low" && <Shield className="h-4 w-4 text-green-500" />}
                   {plan.risk === "Moderate" && <Scale className="h-4 w-4 text-yellow-500" />}
                   {plan.risk === "High" && <Flame className="h-4 w-4 text-red-500" />}
                   <span>Risk Tolerance: {plan.risk}</span>
                 </div>
 
-                {/* Growth Profile Section */}
-                <div className="flex items-center gap-2 text-sm">
+                <div className="flex items-center gap-2">
                   {plan.growthProfile === "Conservative" && <ArrowDownLeft className="h-4 w-4 text-blue-500" />}
                   {plan.growthProfile === "Balanced" && <ArrowRight className="h-4 w-4 text-yellow-500" />}
                   {plan.growthProfile === "Aggressive" && <ArrowUpRight className="h-4 w-4 text-red-500" />}
