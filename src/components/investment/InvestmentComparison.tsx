@@ -46,14 +46,14 @@ const investmentTypes = [
   },
 ];
 
+// Define metrics as a regular array instead of a readonly tuple
 const metrics = ["risk", "roi", "liquidity", "growth"] as const;
+type MetricType = typeof metrics[number];
 
 export const InvestmentComparison = () => {
-  const [selectedMetrics, setSelectedMetrics] = useState<typeof metrics[number][]>(
-    metrics
-  );
+  const [selectedMetrics, setSelectedMetrics] = useState<MetricType[]>(Array.from(metrics));
 
-  const toggleMetric = (metric: typeof metrics[number]) => {
+  const toggleMetric = (metric: MetricType) => {
     setSelectedMetrics((prev) =>
       prev.includes(metric)
         ? prev.filter((m) => m !== metric)
