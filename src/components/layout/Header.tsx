@@ -47,8 +47,6 @@ export const Header = () => {
   const menuItems = [
     { label: "Dashboard", path: "/dashboard" },
     { label: "Budget & Expense", path: "/budget" },
-    { label: "Profile", path: "/profile" },
-    { label: "Settings", path: "/settings" },
   ];
 
   const handleLogout = async () => {
