@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export const OnboardingForm = () => {
   const [step, setStep] = useState(1);
@@ -26,14 +27,55 @@ export const OnboardingForm = () => {
     }
   };
 
-  const handleSubmit = () => {
-    // Here we would typically make an API call to save the onboarding data
-    console.log("Onboarding completed:", answers);
-    toast({
-      title: "Profile completed!",
-      description: "Welcome to your financial wellness journey.",
-    });
-    navigate("/dashboard");
+  const handleSubmit = async () => {
+    try {
+      console.log("Submitting onboarding data:", answers);
+      
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: "Error",
+          description: "You must be logged in to complete your profile.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          financial_goals: answers.financialGoals,
+          risk_tolerance: answers.riskTolerance,
+          investment_horizon: answers.investmentHorizon,
+          monthly_income: parseFloat(answers.monthlyIncome) || 0,
+          monthly_expenses: parseFloat(answers.monthlyExpenses) || 0,
+        })
+        .eq('id', session.user.id);
+
+      if (error) {
+        console.error("Error updating profile:", error);
+        toast({
+          title: "Error",
+          description: "Failed to update profile. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log("Profile updated successfully");
+      toast({
+        title: "Profile completed!",
+        description: "Welcome to your financial wellness journey.",
+      });
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error in handleSubmit:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const renderStep = () => {
