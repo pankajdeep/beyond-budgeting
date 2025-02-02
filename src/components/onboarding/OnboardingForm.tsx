@@ -43,27 +43,27 @@ export const OnboardingForm = () => {
       }
 
       const { error } = await supabase
-        .from('profiles')
-        .update({
+        .from('user_onboarding')
+        .insert({
+          user_id: session.user.id,
           financial_goals: answers.financialGoals,
           risk_tolerance: answers.riskTolerance,
           investment_horizon: answers.investmentHorizon,
           monthly_income: parseFloat(answers.monthlyIncome) || 0,
           monthly_expenses: parseFloat(answers.monthlyExpenses) || 0,
-        })
-        .eq('id', session.user.id);
+        });
 
       if (error) {
-        console.error("Error updating profile:", error);
+        console.error("Error updating onboarding:", error);
         toast({
           title: "Error",
-          description: "Failed to update profile. Please try again.",
+          description: "Failed to save onboarding data. Please try again.",
           variant: "destructive",
         });
         return;
       }
 
-      console.log("Profile updated successfully");
+      console.log("Onboarding completed successfully");
       toast({
         title: "Profile completed!",
         description: "Welcome to your financial wellness journey.",

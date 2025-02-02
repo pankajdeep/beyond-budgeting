@@ -13,33 +13,44 @@ const Dashboard = () => {
   const { data: profile, isLoading: isLoadingProfile } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      console.log("Fetching user profile...");
+      console.log("Fetching user profile and onboarding data...");
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         navigate("/signin");
         return null;
       }
 
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", session.user.id)
-        .single();
+      // Fetch both profile and onboarding data
+      const [profileResponse, onboardingResponse] = await Promise.all([
+        supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single(),
+        supabase
+          .from("user_onboarding")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .single()
+      ]);
 
-      if (error) {
-        console.error("Error fetching profile:", error);
-        throw error;
+      if (profileResponse.error) {
+        console.error("Error fetching profile:", profileResponse.error);
+        throw profileResponse.error;
       }
 
-      console.log("Profile data:", data);
-
-      if (!data.monthly_income || !data.monthly_expenses || !data.financial_goals || !data.risk_tolerance || !data.investment_horizon) {
-        console.log("Profile incomplete, redirecting to onboarding...");
+      // If no onboarding data exists, redirect to onboarding
+      if (onboardingResponse.error || !onboardingResponse.data) {
+        console.log("Onboarding data not found, redirecting to onboarding...");
         navigate("/onboarding");
         return null;
       }
 
-      return data;
+      // Combine profile and onboarding data
+      return {
+        ...profileResponse.data,
+        ...onboardingResponse.data
+      };
     },
   });
 
