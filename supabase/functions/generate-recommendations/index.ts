@@ -49,7 +49,7 @@ serve(async (req) => {
       .from('profiles')
       .select('*')
       .eq('id', user.id)
-      .single();
+      .maybeSingle();
 
     console.log('Profile fetch result:', { profile, profileError });
 
@@ -60,16 +60,16 @@ serve(async (req) => {
 
     if (!profile) {
       console.error('Profile not found for user:', user.id);
-      throw new Error('Profile not found');
+      throw new Error('Profile not found - Please complete onboarding first');
     }
 
     // Create OpenAI prompt based on user's financial data
     const prompt = `As a financial advisor, analyze this user's financial data and provide 3 personalized recommendations:
-    Monthly Income: $${profile.monthly_income}
-    Monthly Expenses: $${profile.monthly_expenses}
-    Risk Tolerance: ${profile.risk_tolerance}
-    Financial Goals: ${profile.financial_goals}
-    Investment Horizon: ${profile.investment_horizon}
+    Monthly Income: $${profile.monthly_income || 0}
+    Monthly Expenses: $${profile.monthly_expenses || 0}
+    Risk Tolerance: ${profile.risk_tolerance || 'Not specified'}
+    Financial Goals: ${profile.financial_goals || 'Not specified'}
+    Investment Horizon: ${profile.investment_horizon || 'Not specified'}
     
     Provide 3 specific, actionable recommendations in JSON format with the following structure:
     {

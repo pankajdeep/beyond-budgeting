@@ -20,25 +20,20 @@ interface FinancialMetricsProps {
 }
 
 export const FinancialMetrics = ({
-  monthlyIncome,
-  monthlyExpenses,
-  bankAccounts,
+  monthlyIncome = 0,
+  monthlyExpenses = 0,
+  bankAccounts = [],
 }: FinancialMetricsProps) => {
-  const totalBalance = bankAccounts?.length > 0 
-    ? bankAccounts.reduce((sum, account) => sum + account.balance, 0)
-    : 0;
-    
+  const totalBalance = bankAccounts?.reduce((sum, account) => sum + (account?.balance || 0), 0);
   const savingsGoal = monthlyIncome * 6; // 6 months of income as emergency fund goal
   
   // Calculate monthly spending from transactions, defaulting to monthlyExpenses if no transactions
-  const currentMonthTransactions = bankAccounts?.length > 0
-    ? bankAccounts.flatMap(account =>
-        account.transactions?.filter(t => 
-          t.transaction_type === 'expense' && 
-          new Date(t.date).getMonth() === new Date().getMonth()
-        ) || []
-      )
-    : [];
+  const currentMonthTransactions = bankAccounts?.flatMap(account =>
+    account.transactions?.filter(t => 
+      t.transaction_type === 'expense' && 
+      new Date(t.date).getMonth() === new Date().getMonth()
+    ) || []
+  );
   
   const monthlySpending = currentMonthTransactions.length > 0
     ? currentMonthTransactions.reduce((sum, t) => sum + t.amount, 0)
