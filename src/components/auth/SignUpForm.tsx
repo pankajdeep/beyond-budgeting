@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { Link, useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export const SignUpForm = () => {
   const [formData, setFormData] = useState({
@@ -14,25 +15,55 @@ export const SignUpForm = () => {
     age: "",
     occupation: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading) return;
+
     try {
-      // Here we would typically make an API call to register the user
-      console.log("Form submitted:", formData);
+      setIsLoading(true);
+      console.log("Attempting to sign up with:", formData);
+      
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            name: formData.name,
+            age: parseInt(formData.age),
+            occupation: formData.occupation,
+          },
+        },
+      });
+
+      if (error) {
+        console.error("Sign up error:", error);
+        toast({
+          title: "Error creating account",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log("Sign up successful:", data);
       toast({
         title: "Account created successfully!",
-        description: "Please complete your profile to continue.",
+        description: "Please check your email to verify your account before signing in.",
       });
-      navigate("/onboarding");
+      navigate("/signin");
     } catch (error) {
+      console.error("Unexpected error:", error);
       toast({
         title: "Error creating account",
-        description: "Please try again later.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -55,6 +86,7 @@ export const SignUpForm = () => {
               setFormData({ ...formData, name: e.target.value })
             }
             required
+            disabled={isLoading}
           />
         </div>
         <div className="space-y-2">
@@ -68,6 +100,7 @@ export const SignUpForm = () => {
               setFormData({ ...formData, email: e.target.value })
             }
             required
+            disabled={isLoading}
           />
         </div>
         <div className="space-y-2">
@@ -80,6 +113,7 @@ export const SignUpForm = () => {
               setFormData({ ...formData, password: e.target.value })
             }
             required
+            disabled={isLoading}
           />
         </div>
         <div className="space-y-2">
@@ -92,6 +126,7 @@ export const SignUpForm = () => {
               setFormData({ ...formData, age: e.target.value })
             }
             required
+            disabled={isLoading}
           />
         </div>
         <div className="space-y-2">
@@ -104,17 +139,18 @@ export const SignUpForm = () => {
               setFormData({ ...formData, occupation: e.target.value })
             }
             required
+            disabled={isLoading}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Sign Up
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? "Creating Account..." : "Sign Up"}
         </Button>
       </form>
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
-        <a href="/login" className="text-primary hover:underline">
-          Log in
-        </a>
+        <Link to="/signin" className="text-primary hover:underline">
+          Sign in
+        </Link>
       </p>
     </Card>
   );
