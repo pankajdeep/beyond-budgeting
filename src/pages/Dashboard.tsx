@@ -2,10 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { FinancialMetrics } from "@/components/dashboard/FinancialMetrics";
 import { RecommendationsList } from "@/components/recommendations/RecommendationsList";
+import { ChatWindow } from "@/components/chat/ChatWindow";
 import { Loader2, Settings, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -158,6 +159,8 @@ const Dashboard = () => {
       />
 
       <RecommendationsList />
+
+      <ChatWindow />
 
       <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
         <AlertDialogContent>
