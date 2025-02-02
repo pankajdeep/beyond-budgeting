@@ -92,7 +92,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o',
         messages: [
           { role: 'system', content: 'You are a knowledgeable financial advisor.' },
           { role: 'user', content: prompt }
@@ -103,8 +103,9 @@ serve(async (req) => {
     });
 
     if (!openAIResponse.ok) {
-      console.error('OpenAI API error:', await openAIResponse.text());
-      throw new Error('Failed to get response from OpenAI');
+      const errorText = await openAIResponse.text();
+      console.error('OpenAI API error:', errorText);
+      throw new Error(`OpenAI API error: ${errorText}`);
     }
 
     const data = await openAIResponse.json();
