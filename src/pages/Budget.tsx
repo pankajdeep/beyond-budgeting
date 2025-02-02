@@ -39,7 +39,7 @@ const Budget = () => {
       <Header />
       <div className="w-full px-4 py-8 space-y-8 animate-fadeIn mt-16">
         <div className="max-w-[1400px] mx-auto space-y-2">
-          <h1 className="text-4xl font-bold text-primary">
+          <h1 className="text-4xl font-bold text-[#ffcb05]">
             Budget & Expenses
           </h1>
           <p className="text-muted-foreground hover:text-secondary transition-colors duration-300">
@@ -64,7 +64,7 @@ const Budget = () => {
             <TabsContent value="charts" className="space-y-4">
               <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-semibold text-primary">
+                  <h2 className="text-2xl font-semibold text-[#ffcb05]">
                     Expense Overview
                   </h2>
                   <div className="w-[200px]">
@@ -72,7 +72,7 @@ const Budget = () => {
                       value={selectedAccount}
                       onValueChange={setSelectedAccount}
                     >
-                      <SelectTrigger className="hover:border-primary transition-colors duration-300">
+                      <SelectTrigger className="hover:border-[#0f434e] transition-colors duration-300">
                         <SelectValue placeholder={isLoading ? "Loading..." : "Select account"} />
                       </SelectTrigger>
                       <SelectContent>
@@ -80,7 +80,7 @@ const Budget = () => {
                           <SelectItem 
                             key={account.account_id} 
                             value={account.account_id}
-                            className="hover:bg-primary/10 transition-colors duration-300"
+                            className="hover:bg-[#0f434e]/10 transition-colors duration-300"
                           >
                             {account.account_type} - {account.account_number}
                           </SelectItem>
