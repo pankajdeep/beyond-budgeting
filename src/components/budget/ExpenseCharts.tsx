@@ -28,26 +28,26 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
       }
 
       console.log("Fetched transactions:", userTransactions);
-      return userTransactions;
+      return userTransactions || [];
     }
   });
 
   // Process transaction data by category with enhanced calculations
-  const categoryData = transactions?.reduce((acc: any, transaction: any) => {
+  const categoryData = transactions?.reduce((acc: Record<string, number>, transaction) => {
     const category = transaction.category || 'Other';
     // Only include expenses (negative amounts)
     if (transaction.amount < 0) {
-      acc[category] = (acc[category] || 0) + Math.abs(transaction.amount);
+      acc[category] = (acc[category] || 0) + Math.abs(Number(transaction.amount));
     }
     return acc;
   }, {});
 
-  const totalExpenses = Object.values(categoryData || {}).reduce((sum: any, value: any) => sum + value, 0);
+  const totalExpenses = categoryData ? Object.values(categoryData).reduce((sum: number, value: number) => sum + value, 0) : 0;
 
   const pieChartData = categoryData ? Object.entries(categoryData).map(([name, value]) => ({
     name,
     value: Number(value),
-    percentage: (Number(value) / totalExpenses) * 100
+    percentage: totalExpenses > 0 ? (Number(value) / totalExpenses) * 100 : 0
   })).sort((a, b) => b.value - a.value) : [];
 
   console.log("Processed category data:", pieChartData);
