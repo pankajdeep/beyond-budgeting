@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import Budget from "./pages/Budget";
 import Onboarding from "./pages/Onboarding";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -60,6 +61,16 @@ const App = () => {
               element={
                 isAuthenticated ? (
                   <Dashboard />
+                ) : (
+                  <Navigate to="/signin" replace />
+                )
+              }
+            />
+            <Route
+              path="/budget"
+              element={
+                isAuthenticated ? (
+                  <Budget />
                 ) : (
                   <Navigate to="/signin" replace />
                 )
