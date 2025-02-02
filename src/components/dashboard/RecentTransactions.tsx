@@ -31,7 +31,7 @@ export const RecentTransactions = ({ transactions }: RecentTransactionsProps) =>
   const recentTransactions = transactions.slice(0, 5);
 
   return (
-    <Card className="p-6 animate-fadeIn">
+    <Card className="p-6 animate-fadeIn hover:shadow-lg transition-all duration-300 hover:border-primary">
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Recent Transactions</h3>
         

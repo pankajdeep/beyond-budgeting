@@ -41,7 +41,7 @@ export const FinancialMetrics = ({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-fadeIn">
-      <Card className="p-6 space-y-4">
+      <Card className="p-6 space-y-4 hover:shadow-lg transition-all duration-300 hover:border-primary">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium text-muted-foreground">
             Monthly Spending
@@ -60,7 +60,7 @@ export const FinancialMetrics = ({
         </p>
       </Card>
 
-      <Card className="p-6 space-y-4">
+      <Card className="p-6 space-y-4 hover:shadow-lg transition-all duration-300 hover:border-primary">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium text-muted-foreground">
             Monthly Income
@@ -78,7 +78,7 @@ export const FinancialMetrics = ({
         </div>
       </Card>
 
-      <Card className="p-6 space-y-4">
+      <Card className="p-6 space-y-4 hover:shadow-lg transition-all duration-300 hover:border-primary">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium text-muted-foreground">
             Total Balance

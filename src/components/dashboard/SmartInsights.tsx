@@ -57,7 +57,7 @@ export const SmartInsights = ({ transactions, monthlyIncome }: SmartInsightsProp
   const spendingIncrease = currentMonthSpending - lastMonthSpending;
 
   return (
-    <Card className="p-6 animate-fadeIn">
+    <Card className="p-6 animate-fadeIn hover:shadow-lg transition-all duration-300 hover:border-primary">
       <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
         <Lightbulb className="h-5 w-5 text-primary" />
         Smart Insights

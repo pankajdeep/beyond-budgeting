@@ -23,7 +23,7 @@ export const NetWorthOverview = ({ accounts }: NetWorthOverviewProps) => {
   const totalNetWorth = accounts.reduce((sum, account) => sum + account.balance, 0);
 
   return (
-    <Card className="p-6 animate-fadeIn">
+    <Card className="p-6 animate-fadeIn hover:shadow-lg transition-all duration-300 hover:border-primary">
       <div className="space-y-4">
         <div>
           <h3 className="text-lg font-semibold">Net Worth Overview</h3>

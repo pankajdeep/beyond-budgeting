@@ -28,7 +28,7 @@ export const FinancialGoals = () => {
   ];
 
   return (
-    <Card className="p-6 animate-fadeIn">
+    <Card className="p-6 animate-fadeIn hover:shadow-lg transition-all duration-300 hover:border-primary">
       <div className="space-y-6">
         <h3 className="text-lg font-semibold">Financial Goals</h3>
         

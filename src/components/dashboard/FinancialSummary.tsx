@@ -34,7 +34,7 @@ export const FinancialSummary = ({ accounts }: FinancialSummaryProps) => {
         return (
           <Card 
             key={account.account_id}
-            className="p-6 hover:shadow-lg transition-shadow duration-200"
+            className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary"
           >
             <div className="space-y-4">
               <div className="flex items-start justify-between">
