@@ -33,6 +33,14 @@ const Dashboard = () => {
       }
 
       console.log("Profile data:", data);
+
+      // Check if profile is incomplete
+      if (!data.monthly_income || !data.monthly_expenses || !data.financial_goals || !data.risk_tolerance || !data.investment_horizon) {
+        console.log("Profile incomplete, redirecting to onboarding...");
+        navigate("/onboarding");
+        return null;
+      }
+
       return data;
     },
   });
@@ -81,6 +89,11 @@ const Dashboard = () => {
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
+  }
+
+  // If profile is null (due to redirection), don't render the dashboard
+  if (!profile) {
+    return null;
   }
 
   return (
