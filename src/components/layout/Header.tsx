@@ -78,8 +78,8 @@ export const Header = () => {
                     src="https://images.unsplash.com/photo-1439337153520-7082a56a81f4"
                     alt="Profile picture"
                   />
-                  <AvatarFallback>
-                    <User className="h-6 w-6 text-primary" />
+                  <AvatarFallback className="bg-primary">
+                    <User className="h-6 w-6 text-secondary" />
                   </AvatarFallback>
                 </Avatar>
               </Button>
