@@ -36,6 +36,8 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
           return;
         }
 
+        console.log('Raw transactions:', transactions);
+
         // Group and sum transactions by category
         const categoryTotals = transactions.reduce((acc: { [key: string]: number }, transaction) => {
           const category = transaction.category || 'Uncategorized';
@@ -75,7 +77,7 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
     <div className="grid md:grid-cols-2 gap-6">
       <Card className="p-6 animate-fadeIn delay-200">
         <h3 className="text-xl font-semibold mb-4">Category Breakdown</h3>
-        <div className="h-[300px]">
+        <div className="h-[400px] w-full"> {/* Increased height and ensured full width */}
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -84,8 +86,8 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
                 cy="50%"
                 labelLine={false}
                 label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                outerRadius={100}
-                innerRadius={60}
+                outerRadius={150} // Increased radius
+                innerRadius={80} // Increased inner radius for better donut appearance
                 fill="#8884d8"
                 dataKey="value"
                 paddingAngle={2}
