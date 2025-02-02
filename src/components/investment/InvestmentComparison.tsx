@@ -76,7 +76,7 @@ export const InvestmentComparison = () => {
     <div className="space-y-6 animate-fadeIn delay-300">
       <div className="flex items-center gap-2">
         <BarChart className="h-6 w-6 text-primary" />
-        <h2 className="text-2xl font-bold">Investment Portfolio Comparison</h2>
+        <h2 className="text-2xl font-bold text-secondary dark:text-primary">Investment Portfolio Comparison</h2>
       </div>
 
       <div className="flex flex-wrap gap-4">
@@ -85,7 +85,7 @@ export const InvestmentComparison = () => {
             key={metric}
             pressed={selectedMetrics.includes(metric)}
             onPressedChange={() => toggleMetric(metric)}
-            className="capitalize"
+            className="capitalize bg-secondary text-white hover:text-primary"
           >
             {getMetricDisplay(metric)}
           </Toggle>
@@ -95,20 +95,20 @@ export const InvestmentComparison = () => {
       <div className="rounded-lg border">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-1/4">Type</TableHead>
+            <TableRow className="bg-secondary">
+              <TableHead className="w-1/4 text-primary">Type</TableHead>
               {selectedMetrics.map((metric) => (
-                <TableHead key={metric} className="w-1/6">
+                <TableHead key={metric} className="w-1/6 text-primary">
                   {getMetricDisplay(metric)}
                 </TableHead>
               ))}
-              <TableHead className="w-1/4">Description</TableHead>
+              <TableHead className="w-1/4 text-primary">Description</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {investmentTypes.map((investment) => (
               <TableRow key={investment.type}>
-                <TableCell className="font-medium">{investment.type}</TableCell>
+                <TableCell className="font-medium text-secondary dark:text-primary">{investment.type}</TableCell>
                 {selectedMetrics.map((metric) => (
                   <TableCell key={metric}>
                     <Badge
@@ -119,6 +119,7 @@ export const InvestmentComparison = () => {
                           ? "secondary"
                           : "outline"
                       }
+                      className="bg-secondary text-white"
                     >
                       {investment[metric]}
                     </Badge>
