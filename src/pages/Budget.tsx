@@ -24,7 +24,7 @@ const Budget = () => {
           <Tabs defaultValue="charts" className="space-y-4">
             <TabsList>
               <TabsTrigger value="charts">Expense Analysis</TabsTrigger>
-              <TabsTrigger value="suggestions">AI Suggestions</TabsTrigger>
+              <TabsTrigger value="suggestions">AI-Powered Budget Insights</TabsTrigger>
               <TabsTrigger value="products">Product Recommendations</TabsTrigger>
             </TabsList>
 
