@@ -4,7 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { Shield, TrendingUp, DollarSign, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-type RiskProfile = 'Conservative' | 'Moderate' | 'Aggressive';
+type RiskProfile = 'Low' | 'Medium' | 'High';
 
 interface AllocationStrategy {
   stocks: number;
@@ -15,21 +15,21 @@ interface AllocationStrategy {
 }
 
 const allocationStrategies: Record<RiskProfile, AllocationStrategy> = {
-  Conservative: {
+  Low: {
     stocks: 20,
     bonds: 50,
     mutualFunds: 20,
     crypto: 0,
     cash: 10,
   },
-  Moderate: {
+  Medium: {
     stocks: 40,
     bonds: 30,
     mutualFunds: 20,
     crypto: 5,
     cash: 5,
   },
-  Aggressive: {
+  High: {
     stocks: 60,
     bonds: 10,
     mutualFunds: 15,
@@ -73,16 +73,20 @@ export const InvestmentProfile = () => {
 
   const determineRiskProfile = (): { profile: RiskProfile; reason: string } => {
     if (!profile || !transactions) {
-      return { profile: 'Moderate', reason: 'Insufficient data for analysis' };
+      return { profile: 'Medium', reason: 'Insufficient data for analysis' };
     }
 
     const age = profile.age;
-    const monthlyIncome = profile.monthly_income || 0;
     const occupation = profile.occupation;
     
     // Calculate monthly expenses from transactions
     const monthlyExpenses = transactions.reduce((sum, t) => 
       t.transaction_type === 'expense' ? sum + Number(t.amount) : sum, 0) / 
+      (transactions.length > 0 ? Math.ceil(transactions.length / 30) : 1);
+
+    // Calculate monthly income from transactions
+    const monthlyIncome = transactions.reduce((sum, t) => 
+      t.transaction_type === 'income' ? sum + Number(t.amount) : sum, 0) / 
       (transactions.length > 0 ? Math.ceil(transactions.length / 30) : 1);
 
     // Determine job stability (simple heuristic)
@@ -91,19 +95,19 @@ export const InvestmentProfile = () => {
       occupation.toLowerCase().includes(job.toLowerCase())
     );
 
-    // Conservative Profile Conditions
+    // Low Risk Profile Conditions
     if (
       age > 45 || 
       (monthlyIncome < 5000 && !hasStableJob) || 
       (monthlyExpenses > monthlyIncome * 0.7)
     ) {
       return {
-        profile: 'Conservative',
-        reason: `Based on your ${age > 45 ? 'age' : 'income-to-expense ratio'} and ${hasStableJob ? 'stable' : 'variable'} occupation, a conservative approach is recommended to protect your wealth.`
+        profile: 'Low',
+        reason: `Based on your ${age > 45 ? 'age' : 'income-to-expense ratio'} and ${hasStableJob ? 'stable' : 'variable'} occupation, a low-risk approach is recommended to protect your wealth.`
       };
     }
     
-    // Aggressive Profile Conditions
+    // High Risk Profile Conditions
     if (
       age < 35 && 
       monthlyIncome > 8000 && 
@@ -111,15 +115,15 @@ export const InvestmentProfile = () => {
       monthlyExpenses < monthlyIncome * 0.5
     ) {
       return {
-        profile: 'Aggressive',
+        profile: 'High',
         reason: 'Given your young age, high income, stable job, and good savings rate, you can afford to take more investment risks for potentially higher returns.'
       };
     }
     
-    // Moderate Profile (Default)
+    // Medium Risk Profile (Default)
     return {
-      profile: 'Moderate',
-      reason: 'Based on your balanced age, income, and expense profile, a moderate investment approach offers a good balance of growth and stability.'
+      profile: 'Medium',
+      reason: 'Based on your balanced age, income, and expense profile, a medium-risk investment approach offers a good balance of growth and stability.'
     };
   };
 
@@ -153,11 +157,11 @@ export const InvestmentProfile = () => {
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold">Risk Tolerance Level</h3>
             <span className={`font-medium ${
-              riskProfile === 'Conservative' ? 'text-blue-500' :
-              riskProfile === 'Moderate' ? 'text-yellow-500' :
+              riskProfile === 'Low' ? 'text-blue-500' :
+              riskProfile === 'Medium' ? 'text-yellow-500' :
               'text-red-500'
             }`}>
-              {riskProfile}
+              {riskProfile} Risk
             </span>
           </div>
           <p className="text-sm text-muted-foreground">{reason}</p>

@@ -1,5 +1,4 @@
 import { Header } from "@/components/layout/Header";
-import { InvestmentPortfolio } from "@/components/investment/InvestmentPortfolio";
 import { SuggestedPlans } from "@/components/investment/SuggestedPlans";
 import { InvestmentComparison } from "@/components/investment/InvestmentComparison";
 import { InvestmentProfile } from "@/components/investment/InvestmentProfile";
@@ -18,7 +17,6 @@ const Investment = () => {
 
         <div className="max-w-[1400px] mx-auto space-y-8">
           <InvestmentProfile />
-          <InvestmentPortfolio />
           <SuggestedPlans />
           <InvestmentComparison />
         </div>
