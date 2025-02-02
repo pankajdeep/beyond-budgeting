@@ -24,7 +24,7 @@ export const SignInForm = () => {
 
     try {
       setIsLoading(true);
-      console.log("Attempting to sign in...");
+      console.log("Attempting to sign in with email:", formData.email);
 
       const { error } = await supabase.auth.signInWithPassword({
         email: formData.email,
@@ -42,8 +42,8 @@ export const SignInForm = () => {
           });
         } else if (error.message === "Invalid login credentials") {
           toast({
-            title: "Sign in failed",
-            description: "Please check your email and password, or sign up if you don't have an account.",
+            title: "Invalid credentials",
+            description: "The email or password you entered is incorrect. Please try again or sign up if you don't have an account.",
             variant: "destructive",
           });
         } else {
@@ -56,13 +56,14 @@ export const SignInForm = () => {
         return;
       }
 
+      console.log("Sign in successful, redirecting to dashboard");
       toast({
         title: "Successfully signed in!",
         description: "Welcome back to your dashboard.",
       });
       navigate("/dashboard");
     } catch (error: any) {
-      console.error("Sign in error:", error);
+      console.error("Unexpected sign in error:", error);
       toast({
         title: "Error signing in",
         description: "An unexpected error occurred. Please try again.",
@@ -127,9 +128,6 @@ export const SignInForm = () => {
           <Link to="/signup" className="text-primary hover:underline">
             Sign up
           </Link>
-        </p>
-        <p className="text-xs">
-          Make sure you've verified your email address if you've just signed up.
         </p>
       </div>
     </Card>
