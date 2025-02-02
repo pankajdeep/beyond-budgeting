@@ -143,6 +143,80 @@ export type Database = {
           },
         ]
       }
+      user_accounts: {
+        Row: {
+          account_id: string
+          account_number: string
+          account_type: string
+          balance: number
+          created_at: string
+          customer_id: string
+          interest_rate: number | null
+          last_synced_at: string
+        }
+        Insert: {
+          account_id?: string
+          account_number: string
+          account_type: string
+          balance?: number
+          created_at?: string
+          customer_id: string
+          interest_rate?: number | null
+          last_synced_at?: string
+        }
+        Update: {
+          account_id?: string
+          account_number?: string
+          account_type?: string
+          balance?: number
+          created_at?: string
+          customer_id?: string
+          interest_rate?: number | null
+          last_synced_at?: string
+        }
+        Relationships: []
+      }
+      user_transactions: {
+        Row: {
+          account_id: string
+          amount: number
+          category: string | null
+          description: string | null
+          last_synced_at: string
+          transaction_date: string
+          transaction_id: string
+          transaction_type: string
+        }
+        Insert: {
+          account_id: string
+          amount: number
+          category?: string | null
+          description?: string | null
+          last_synced_at?: string
+          transaction_date?: string
+          transaction_id?: string
+          transaction_type: string
+        }
+        Update: {
+          account_id?: string
+          amount?: number
+          category?: string | null
+          description?: string | null
+          last_synced_at?: string
+          transaction_date?: string
+          transaction_id?: string
+          transaction_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_account"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "user_accounts"
+            referencedColumns: ["account_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
