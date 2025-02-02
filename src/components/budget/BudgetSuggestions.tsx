@@ -76,15 +76,6 @@ export const BudgetSuggestions = () => {
 
     const spendingChange = ((currentMonthTotal - lastMonthTotal) / lastMonthTotal) * 100;
 
-    // Get some example transactions for insights
-    const topCategoryTransactions = Object.entries(categoryTotals)
-      .sort((a, b) => b[1] - a[1])[0];
-    
-    const recentLargeTransactions = transactions
-      .filter(t => t.transaction_type === "expense")
-      .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount))
-      .slice(0, 3);
-
     // Generate insights based on the analysis
     const insights = [
       {
@@ -94,24 +85,19 @@ export const BudgetSuggestions = () => {
         } by ${Math.abs(spendingChange).toFixed(1)}% compared to last month.`,
         icon: TrendingUp,
         action: "View Analysis",
-        explanation: `This insight is calculated by comparing your total spending this month ($${currentMonthTotal.toFixed(2)}) with last month ($${lastMonthTotal.toFixed(2)}). For example, in the current month, your largest expenses were: ${
-          recentLargeTransactions
-            .map(t => `$${Math.abs(t.amount).toFixed(2)} for ${t.description || 'unlabeled transaction'}`)
-            .join(', ')
-        }.`
+        explanation: "This insight is calculated by comparing your total spending this month " +
+          `($${currentMonthTotal.toFixed(2)}) with last month ($${lastMonthTotal.toFixed(2)}). ` +
+          "The percentage change helps you understand your spending trajectory."
       },
       {
         title: "Category Breakdown",
         description: `Your highest spending category is ${
-          topCategoryTransactions?.[0] || "Uncategorized"
+          Object.entries(categoryTotals).sort((a, b) => b[1] - a[1])[0]?.[0]
         }.`,
         icon: Repeat,
         action: "View Categories",
-        explanation: `We analyzed your transactions by category and found that you spent $${
-          topCategoryTransactions?.[1]?.toFixed(2) || '0'
-        } in ${topCategoryTransactions?.[0] || "Uncategorized"}. This represents ${
-          ((topCategoryTransactions?.[1] || 0) / currentMonthTotal * 100).toFixed(1)
-        }% of your total spending this month.`
+        explanation: "We analyzed your transactions by category and identified the category " +
+          "with the highest total spending. This helps you understand where most of your money goes."
       },
       {
         title: "Recent Transactions Alert",
@@ -120,21 +106,16 @@ export const BudgetSuggestions = () => {
         } transactions this month totaling $${currentMonthTotal.toFixed(2)}.`,
         icon: AlertCircle,
         action: "View Details",
-        explanation: `This month's activity includes ${currentMonthTransactions.length} transactions. Your most recent transactions were: ${
-          currentMonthTransactions
-            .slice(0, 3)
-            .map(t => `$${Math.abs(t.amount).toFixed(2)} ${t.description ? `for ${t.description}` : ''}`)
-            .join(', ')
-        }.`
+        explanation: "This insight counts your transactions from the current month and sums up " +
+          "their total value to give you a quick overview of your monthly activity."
       },
       {
         title: "Budget Recommendations",
         description: "Set up custom budget alerts to track your spending in real-time.",
         icon: Bell,
         action: "Set Alerts",
-        explanation: `Based on your spending patterns, we recommend setting up alerts for categories where you spend the most. For example, in ${
-          topCategoryTransactions?.[0] || "your top category"
-        }, you typically spend $${(topCategoryTransactions?.[1] / currentMonthTransactions.length)?.toFixed(2) || '0'} per transaction.`
+        explanation: "Based on your transaction patterns and spending categories, " +
+          "we recommend setting up alerts to help you stay within your budget goals."
       }
     ];
 
@@ -184,7 +165,7 @@ export const BudgetSuggestions = () => {
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   </HoverCardTrigger>
-                  <HoverCardContent className="w-80" sideOffset={5} align="start">
+                  <HoverCardContent className="w-80">
                     <div className="space-y-2">
                       <h4 className="text-sm font-semibold">AI Insight Explanation</h4>
                       <p className="text-sm text-muted-foreground">
