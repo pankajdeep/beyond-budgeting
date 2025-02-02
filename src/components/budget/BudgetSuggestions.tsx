@@ -47,20 +47,13 @@ const suggestions = [
     description: "Review and cancel unused subscription services.",
     icon: CreditCard,
     action: "Review Now",
-  },
-  {
-    title: "Maximize Savings on Investments",
-    description: "Explore investment opportunities to grow your wealth.",
-    icon: PiggyBank,
-    action: "Learn More",
-  },
+  }
 ];
 
 export const BudgetSuggestions = () => {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">AI-Powered Budget Insights</h2>
+      <div className="flex items-center justify-end">
         <Button variant="outline" size="sm">
           Refresh Insights
           <ChevronRight className="ml-2 h-4 w-4" />
