@@ -9,6 +9,7 @@ interface BankAccount {
   transactions: Array<{
     amount: number;
     transaction_type: string;
+    date: string;  // Added the date property to match the database schema
   }>;
 }
 
