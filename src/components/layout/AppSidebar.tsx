@@ -67,6 +67,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     isActive={location.pathname === item.url}
                     onClick={() => navigate(item.url)}
+                    className="data-[active=true]:bg-blue-500 data-[active=true]:text-white"
                   >
                     <item.icon className="h-4 w-4" />
                     <span>{item.title}</span>
