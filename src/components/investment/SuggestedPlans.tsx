@@ -25,6 +25,7 @@ const plans = [
     description: "Guaranteed retirement income with protection against market downturns",
     provider: "SunLife",
     url: "https://www.sunlife.ca/en/investments/guaranteed-investments/",
+    historicalUrl: "https://www.sunlife.ca/en/investments/guaranteed-investments/historical-performance/",
     details: [
       "Guaranteed Investment Certificates (GICs) with competitive rates",
       "Guaranteed retirement income options",
@@ -42,6 +43,7 @@ const plans = [
     description: "Diversified portfolio balancing growth potential with downside protection",
     provider: "SunLife",
     url: "https://www.sunlife.ca/en/investments/mutual-funds/",
+    historicalUrl: "https://www.sunlife.ca/en/investments/mutual-funds/performance/",
     details: [
       "Professional portfolio management",
       "Mix of stocks, bonds, and alternative investments",
@@ -59,6 +61,7 @@ const plans = [
     description: "Aggressive growth through global equity investments",
     provider: "SunLife",
     url: "https://www.sunlife.ca/en/investments/mutual-funds/",
+    historicalUrl: "https://www.sunlife.ca/en/investments/mutual-funds/performance/global-growth/",
     details: [
       "Focus on high-growth global companies",
       "Active management by experienced team",
@@ -140,6 +143,14 @@ export const SuggestedPlans = () => {
                         <li key={index} className="text-sm text-muted-foreground">{detail}</li>
                       ))}
                     </ul>
+                    <Button 
+                      variant="link"
+                      className="mt-4 p-0 h-auto text-sm text-primary hover:text-primary/80 flex items-center gap-2"
+                      onClick={() => window.open(plan.historicalUrl, '_blank')}
+                    >
+                      View Historical Performance
+                      <ExternalLink className="h-3 w-3" />
+                    </Button>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
