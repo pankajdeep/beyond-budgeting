@@ -17,15 +17,15 @@ import { Button } from "@/components/ui/button";
 
 const plans = [
   {
-    name: "SunFlex Retirement",
+    name: "SunFlex GIC",
     risk: "Low",
     growth: "3-5%",
     growthProfile: "Conservative",
     duration: "5+ years",
     description: "Guaranteed retirement income with protection against market downturns",
     provider: "SunLife",
-    url: "https://www.sunlife.ca/en/investments/guaranteed-investments/",
-    historicalUrl: "https://www.sunlife.ca/en/investments/guaranteed-investments/historical-performance/",
+    url: "https://www.sunlife.ca/en/investments/guaranteed-investments/guaranteed-investment-certificates/",
+    historicalUrl: "https://www.sunlife.ca/en/investments/guaranteed-investments/guaranteed-investment-certificates/rates/",
     details: [
       "Guaranteed Investment Certificates (GICs) with competitive rates",
       "Guaranteed retirement income options",
@@ -42,8 +42,8 @@ const plans = [
     duration: "7-10 years",
     description: "Diversified portfolio balancing growth potential with downside protection",
     provider: "SunLife",
-    url: "https://www.sunlife.ca/en/investments/mutual-funds/",
-    historicalUrl: "https://www.sunlife.ca/en/investments/mutual-funds/performance/",
+    url: "https://www.sunlifeglobalinvestments.com/en/slgi-funds/sun-life-granite-balanced-portfolio/",
+    historicalUrl: "https://www.sunlifeglobalinvestments.com/en/slgi-funds/sun-life-granite-balanced-portfolio/mp/SLMBF/curr/CAD/",
     details: [
       "Professional portfolio management",
       "Mix of stocks, bonds, and alternative investments",
@@ -53,15 +53,15 @@ const plans = [
     ],
   },
   {
-    name: "Sun Life MFS Global Growth Fund",
+    name: "Sun Life Global Equity Fund",
     risk: "High",
     growth: "8-12%",
     growthProfile: "Aggressive",
     duration: "10+ years",
     description: "Aggressive growth through global equity investments",
     provider: "SunLife",
-    url: "https://www.sunlife.ca/en/investments/mutual-funds/",
-    historicalUrl: "https://www.sunlife.ca/en/investments/mutual-funds/performance/global-growth/",
+    url: "https://www.sunlifeglobalinvestments.com/en/slgi-funds/sun-life-global-equity-fund/",
+    historicalUrl: "https://www.sunlifeglobalinvestments.com/en/slgi-funds/sun-life-global-equity-fund/mp/SLGEF/curr/CAD/",
     details: [
       "Focus on high-growth global companies",
       "Active management by experienced team",
