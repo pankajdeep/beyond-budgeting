@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Menu, User, Settings, LogOut, LayoutDashboard, BarChart, PiggyBank } from "lucide-react";
+import { Menu, User, Settings, LogOut, LayoutDashboard, BarChart, PiggyBank, BookOpen } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -59,6 +59,11 @@ export const Header = () => {
       label: "Investment & Savings",
       path: "/investment",
       icon: PiggyBank
+    },
+    {
+      label: "Financial Literacy",
+      path: "/financial-literacy",
+      icon: BookOpen
     },
   ];
 

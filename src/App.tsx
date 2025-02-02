@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Budget from "./pages/Budget";
 import Investment from "./pages/Investment";
+import FinancialLiteracy from "./pages/FinancialLiteracy";
 import Onboarding from "./pages/Onboarding";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -83,6 +84,16 @@ const App = () => {
                 element={
                   isAuthenticated ? (
                     <Investment />
+                  ) : (
+                    <Navigate to="/signin" replace />
+                  )
+                }
+              />
+              <Route
+                path="/financial-literacy"
+                element={
+                  isAuthenticated ? (
+                    <FinancialLiteracy />
                   ) : (
                     <Navigate to="/signin" replace />
                   )
