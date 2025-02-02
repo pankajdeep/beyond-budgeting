@@ -16,7 +16,7 @@
     --primary: 45 100% 50%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 100% 20%;
+    --secondary: 189 66% 18%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 210 40% 96%;
@@ -57,7 +57,7 @@
     --primary: 45 100% 50%;
     --primary-foreground: 222 47% 11%;
 
-    --secondary: 210 100% 20%;
+    --secondary: 189 66% 18%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217 33% 18%;
@@ -126,7 +126,7 @@
   }
 
   /* New styles for text on blue backgrounds */
-  .bg-secondary, .bg-[#003366] {
+  .bg-secondary, .bg-[#0f434e] {
     @apply text-white;
   }
 
@@ -136,12 +136,12 @@
 
   /* Headers on blue backgrounds */
   .bg-secondary h1, .bg-secondary h2, .bg-secondary h3,
-  .bg-[#003366] h1, .bg-[#003366] h2, .bg-[#003366] h3 {
+  .bg-[#0f434e] h1, .bg-[#0f434e] h2, .bg-[#0f434e] h3 {
     @apply text-primary;
   }
 
   /* Links on blue backgrounds */
-  .bg-secondary a, .bg-[#003366] a {
+  .bg-secondary a, .bg-[#0f434e] a {
     @apply text-primary hover:text-primary-dark transition-colors;
   }
 }
