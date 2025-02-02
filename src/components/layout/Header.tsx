@@ -126,7 +126,10 @@ export const Header = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-accent">
               <Avatar className="h-10 w-10">
-                <AvatarImage src="/placeholder.svg" alt="Profile" />
+                <AvatarImage 
+                  src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952" 
+                  alt="Profile picture"
+                />
                 <AvatarFallback>
                   <User className="h-6 w-6 text-primary" />
                 </AvatarFallback>
