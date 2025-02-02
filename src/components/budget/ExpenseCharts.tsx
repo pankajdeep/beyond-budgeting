@@ -1,22 +1,13 @@
 import { Card } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { formatCurrency } from "@/lib/utils";
+import { ThreeDChart } from "./ThreeDChart";
 
 interface ExpenseChartsProps {
   timeframe: "monthly" | "yearly";
 }
-
-// Dark color palette for the 3D chart
-const COLORS = [
-  "#1A1F2C", // Dark Purple
-  "#221F26", // Dark Charcoal
-  "#222222", // Dark Gray
-  "#555555", // Medium Dark Gray
-  "#333333", // Another Dark Gray
-  "#2226",   // Transparent Dark Gray
-];
 
 export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
   console.log("Fetching transaction data for timeframe:", timeframe);
@@ -39,9 +30,10 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
     }
   });
 
-  // Process transaction data by category
-  const categoryData = transactions?.reduce((acc: any, transaction: any) => {
-    const category = transaction.category || 'Other';
+  // Process transaction data by category with proper initialization and validation
+  const categoryData = transactions?.reduce((acc: Record<string, number>, transaction) => {
+    if (!transaction?.category || !transaction?.amount) return acc;
+    const category = transaction.category;
     acc[category] = (acc[category] || 0) + Math.abs(transaction.amount);
     return acc;
   }, {});
@@ -71,35 +63,8 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
     <div className="grid md:grid-cols-2 gap-6">
       <Card className="p-6 animate-fadeIn delay-200">
         <h3 className="text-xl font-semibold mb-4">Category Breakdown</h3>
-        <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={pieChartData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, value }) => `${name} ${formatCurrency(value)}`}
-                outerRadius={100}
-                innerRadius={60}
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {pieChartData.map((entry: any, index: number) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={COLORS[index % COLORS.length]}
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth={2}
-                  />
-                ))}
-              </Pie>
-              <Tooltip 
-                formatter={(value: number) => formatCurrency(value)}
-              />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="h-[300px] relative">
+          <ThreeDChart data={pieChartData} />
         </div>
       </Card>
 
