@@ -39,7 +39,7 @@ export const EducationalContent = () => {
       <h2 className="text-2xl font-semibold">Educational Resources</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {articles.map((article) => (
-          <Card key={article.id} className="hover:shadow-lg transition-all duration-300 hover:border-primary">
+          <Card key={article.id} className="group hover:shadow-lg transition-all duration-300 hover:border-primary">
             <CardHeader>
               <img
                 src={article.thumbnail}
