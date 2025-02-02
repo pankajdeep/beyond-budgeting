@@ -82,7 +82,7 @@ export const SuggestedPlans = () => {
           <Card key={plan.name} className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <div className="flex justify-between items-start">
-                <div>
+                <div className="space-y-2">
                   <CardTitle>{plan.name}</CardTitle>
                   <CardDescription className="text-sm">{plan.description}</CardDescription>
                 </div>
