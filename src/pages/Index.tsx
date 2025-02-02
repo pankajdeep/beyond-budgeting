@@ -58,10 +58,10 @@ const Index = () => {
       <section className="relative min-h-[90vh] w-full flex items-center justify-center px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#003366] to-[#001830] opacity-90" />
         <div className="relative z-10 max-w-4xl mx-auto text-center animate-on-load">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fadeIn">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-primary animate-fadeIn">
             Empower Your Financial Future with AI
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-gray-200 animate-fadeIn delay-200">
+          <p className="text-xl md:text-2xl mb-8 text-white animate-fadeIn delay-200">
             Smart budgeting, personalized investment guidance, and expert financial insights—all in one place.
           </p>
           <Button
@@ -152,37 +152,36 @@ const Index = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
-              <h3 className="text-xl font-semibold mb-4">Company</h3>
+              <h3 className="text-xl font-semibold mb-4 text-primary">Company</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="hover:text-[#FFCD00] transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-[#FFCD00] transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-[#FFCD00] transition-colors">Contact</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">About Us</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Careers</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Contact</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold mb-4">Legal</h3>
+              <h3 className="text-xl font-semibold mb-4 text-primary">Legal</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="hover:text-[#FFCD00] transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-[#FFCD00] transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-[#FFCD00] transition-colors">Security</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Terms of Service</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Security</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold mb-4">Resources</h3>
+              <h3 className="text-xl font-semibold mb-4 text-primary">Resources</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="hover:text-[#FFCD00] transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-[#FFCD00] transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-[#FFCD00] transition-colors">FAQs</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Help Center</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">FAQs</a></li>
               </ul>
             </div>
           </div>
           <div className="text-center pt-8 border-t border-gray-700">
-            <p>&copy; 2024 Money Mindfully. All rights reserved.</p>
+            <p className="text-white">&copy; 2024 Money Mindfully. All rights reserved.</p>
           </div>
         </div>
       </footer>
 
-      {/* Sticky CTA */}
       <div className="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg transform translate-y-full animate-slideUp md:hidden">
         <Button
           onClick={() => navigate("/signup")}

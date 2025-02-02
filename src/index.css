@@ -124,6 +124,26 @@
   .btn-secondary {
     @apply bg-secondary hover:bg-secondary-light text-white font-semibold;
   }
+
+  /* New styles for text on blue backgrounds */
+  .bg-secondary, .bg-[#003366] {
+    @apply text-white;
+  }
+
+  .bg-secondary-light {
+    @apply text-white;
+  }
+
+  /* Headers on blue backgrounds */
+  .bg-secondary h1, .bg-secondary h2, .bg-secondary h3,
+  .bg-[#003366] h1, .bg-[#003366] h2, .bg-[#003366] h3 {
+    @apply text-primary;
+  }
+
+  /* Links on blue backgrounds */
+  .bg-secondary a, .bg-[#003366] a {
+    @apply text-primary hover:text-primary-dark transition-colors;
+  }
 }
 
 @keyframes fadeIn {
