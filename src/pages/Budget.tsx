@@ -39,30 +39,40 @@ const Budget = () => {
       <Header />
       <div className="w-full px-4 py-8 space-y-8 animate-fadeIn mt-16">
         <div className="max-w-[1400px] mx-auto space-y-2">
-          <h1 className="text-4xl font-bold">Budget & Expenses</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-4xl font-bold text-primary hover:text-secondary transition-colors duration-300">
+            Budget & Expenses
+          </h1>
+          <p className="text-muted-foreground hover:text-secondary transition-colors duration-300">
             Track your spending and get personalized financial insights
           </p>
         </div>
 
         <div className="max-w-[1400px] mx-auto">
           <Tabs defaultValue="charts" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="charts">Expense Analysis</TabsTrigger>
-              <TabsTrigger value="suggestions">AI-Powered Budget Insights</TabsTrigger>
-              <TabsTrigger value="products">Product Recommendations</TabsTrigger>
+            <TabsList className="space-x-2">
+              <TabsTrigger value="charts" className="tab-trigger">
+                Expense Analysis
+              </TabsTrigger>
+              <TabsTrigger value="suggestions" className="tab-trigger">
+                AI-Powered Budget Insights
+              </TabsTrigger>
+              <TabsTrigger value="products" className="tab-trigger">
+                Product Recommendations
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="charts" className="space-y-4">
-              <Card className="p-6">
+              <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-semibold">Expense Overview</h2>
+                  <h2 className="text-2xl font-semibold text-primary hover:text-secondary transition-colors duration-300">
+                    Expense Overview
+                  </h2>
                   <div className="w-[200px]">
                     <Select
                       value={selectedAccount}
                       onValueChange={setSelectedAccount}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="hover:border-primary transition-colors duration-300">
                         <SelectValue placeholder={isLoading ? "Loading..." : "Select account"} />
                       </SelectTrigger>
                       <SelectContent>
@@ -70,6 +80,7 @@ const Budget = () => {
                           <SelectItem 
                             key={account.account_id} 
                             value={account.account_id}
+                            className="hover:bg-primary/10 transition-colors duration-300"
                           >
                             {account.account_type} - {account.account_number}
                           </SelectItem>
