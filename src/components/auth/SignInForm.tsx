@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const SignInForm = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ export const SignInForm = () => {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [showVerificationAlert, setShowVerificationAlert] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -23,12 +25,33 @@ export const SignInForm = () => {
     try {
       setIsLoading(true);
       console.log("Attempting to sign in...");
+      
+      // First, check if the user exists and is verified
+      const { data: { users }, error: getUserError } = await supabase.auth.admin.listUsers({
+        filters: {
+          email: formData.email
+        }
+      });
+
+      if (getUserError) {
+        console.error("Error checking user:", getUserError);
+      } else if (users && users[0] && !users[0].email_confirmed_at) {
+        setShowVerificationAlert(true);
+        toast({
+          title: "Email not verified",
+          description: "Please check your email and verify your account before signing in.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
 
       if (error) {
+        console.error("Sign in error:", error);
         if (error.message === "Invalid login credentials") {
           toast({
             title: "Sign in failed",
@@ -70,6 +93,14 @@ export const SignInForm = () => {
           Sign in to access your dashboard
         </p>
       </div>
+      {showVerificationAlert && (
+        <Alert>
+          <AlertDescription>
+            Please check your email and verify your account before signing in. 
+            If you haven't received the verification email, try signing up again.
+          </AlertDescription>
+        </Alert>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
