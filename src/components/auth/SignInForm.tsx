@@ -25,25 +25,6 @@ export const SignInForm = () => {
     try {
       setIsLoading(true);
       console.log("Attempting to sign in...");
-      
-      // First, check if the user exists and is verified
-      const { data: { users }, error: getUserError } = await supabase.auth.admin.listUsers({
-        filters: {
-          email: formData.email
-        }
-      });
-
-      if (getUserError) {
-        console.error("Error checking user:", getUserError);
-      } else if (users && users[0] && !users[0].email_confirmed_at) {
-        setShowVerificationAlert(true);
-        toast({
-          title: "Email not verified",
-          description: "Please check your email and verify your account before signing in.",
-          variant: "destructive",
-        });
-        return;
-      }
 
       const { error } = await supabase.auth.signInWithPassword({
         email: formData.email,
@@ -52,7 +33,14 @@ export const SignInForm = () => {
 
       if (error) {
         console.error("Sign in error:", error);
-        if (error.message === "Invalid login credentials") {
+        if (error.message.includes("Email not confirmed")) {
+          setShowVerificationAlert(true);
+          toast({
+            title: "Email not verified",
+            description: "Please check your email and verify your account before signing in.",
+            variant: "destructive",
+          });
+        } else if (error.message === "Invalid login credentials") {
           toast({
             title: "Sign in failed",
             description: "Please check your email and password, or sign up if you don't have an account.",
