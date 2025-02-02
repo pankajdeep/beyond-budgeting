@@ -34,15 +34,15 @@ export const FinancialSummary = ({ accounts }: FinancialSummaryProps) => {
         return (
           <Card 
             key={account.account_id}
-            className="p-6 hover:shadow-lg transition-shadow duration-200 bg-white/10 backdrop-blur-lg border border-white/20 hover:-translate-y-1"
+            className="p-6 hover:shadow-lg transition-shadow duration-200"
           >
             <div className="space-y-4">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-semibold text-lg text-primary">
+                  <h3 className="font-semibold text-lg">
                     {account.account_type}
                   </h3>
-                  <p className="text-sm text-primary-200">
+                  <p className="text-sm text-muted-foreground">
                     {maskAccountNumber(account.account_number)}
                   </p>
                 </div>
@@ -54,7 +54,7 @@ export const FinancialSummary = ({ accounts }: FinancialSummaryProps) => {
               </div>
 
               <div className="space-y-2">
-                <p className="text-2xl font-bold text-white">
+                <p className="text-2xl font-bold">
                   {formatCurrency(account.balance)}
                 </p>
                 <div className="flex items-center space-x-2">

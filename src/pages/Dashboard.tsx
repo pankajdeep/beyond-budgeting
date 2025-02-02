@@ -89,8 +89,8 @@ const Dashboard = () => {
 
   if (isLoadingProfile || isLoadingAccounts || isLoadingTransactions) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
@@ -102,29 +102,27 @@ const Dashboard = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gradient-to-br from-secondary-500 to-secondary-900 dark:from-secondary-900 dark:to-secondary-950">
-        <div className="container mx-auto px-4 py-8 space-y-8 mt-16">
-          <div className="space-y-2">
-            <h1 className="text-4xl font-bold text-white animate-fadeIn">
-              Welcome back, {profile?.full_name}
-            </h1>
-            <p className="text-primary-100">
-              Here's your financial overview
-            </p>
-          </div>
+      <div className="container mx-auto px-4 py-8 space-y-8 mt-16">
+        <div className="space-y-2">
+          <h1 className="text-4xl font-bold animate-fadeIn">
+            Welcome back, {profile?.full_name}
+          </h1>
+          <p className="text-muted-foreground">
+            Here's your financial overview
+          </p>
+        </div>
 
-          <div className="grid gap-8">
-            <FinancialSummary accounts={accounts || []} />
-            
-            <div className="grid md:grid-cols-2 gap-8">
-              <NetWorthOverview accounts={accounts || []} />
-              <SpendingAnalysis transactions={transactions || []} />
-            </div>
-            
-            <RecentTransactions transactions={transactions || []} />
-            
-            <FinancialGoals />
+        <div className="grid gap-8">
+          <FinancialSummary accounts={accounts || []} />
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <NetWorthOverview accounts={accounts || []} />
+            <SpendingAnalysis transactions={transactions || []} />
           </div>
+          
+          <RecentTransactions transactions={transactions || []} />
+          
+          <FinancialGoals />
         </div>
       </div>
     </>
