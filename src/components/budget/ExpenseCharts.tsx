@@ -1,31 +1,85 @@
 import { Card } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
+import { formatCurrency } from "@/lib/utils";
 
 interface ExpenseChartsProps {
-  timeframe: "monthly" | "yearly";
+  accountId: string;
 }
-
-// Placeholder data
-const categoryData = [
-  { name: "Housing", value: 1500 },
-  { name: "Food", value: 500 },
-  { name: "Transportation", value: 300 },
-  { name: "Entertainment", value: 200 },
-  { name: "Utilities", value: 250 },
-];
-
-const trendData = [
-  { name: "Jan", amount: 2500 },
-  { name: "Feb", amount: 2300 },
-  { name: "Mar", amount: 2800 },
-  { name: "Apr", amount: 2400 },
-  { name: "May", amount: 2600 },
-  { name: "Jun", amount: 2200 },
-];
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
-export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
+export const ExpenseCharts = ({ accountId }: ExpenseChartsProps) => {
+  const { data: transactions = [], isLoading } = useQuery({
+    queryKey: ['transactions', accountId],
+    queryFn: async () => {
+      if (!accountId) return [];
+      
+      const { data, error } = await supabase
+        .from('user_transactions')
+        .select('*')
+        .eq('account_id', accountId)
+        .eq('transaction_type', 'Withdrawal')
+        .gte('transaction_date', new Date(new Date().setMonth(new Date().getMonth() - 6)).toISOString());
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!accountId,
+  });
+
+  // Process data for category breakdown
+  const categoryData = transactions.reduce((acc: any[], transaction) => {
+    const category = transaction.category || 'Other';
+    const existingCategory = acc.find(item => item.name === category);
+    
+    if (existingCategory) {
+      existingCategory.value += Math.abs(transaction.amount);
+    } else {
+      acc.push({
+        name: category,
+        value: Math.abs(transaction.amount)
+      });
+    }
+    
+    return acc;
+  }, []);
+
+  // Process data for monthly trends
+  const monthlyData = transactions.reduce((acc: any[], transaction) => {
+    const month = format(new Date(transaction.transaction_date), 'MMM');
+    const existingMonth = acc.find(item => item.name === month);
+    
+    if (existingMonth) {
+      existingMonth.amount += Math.abs(transaction.amount);
+    } else {
+      acc.push({
+        name: month,
+        amount: Math.abs(transaction.amount)
+      });
+    }
+    
+    return acc;
+  }, []);
+
+  if (!accountId) {
+    return (
+      <div className="text-center py-8 text-muted-foreground">
+        Please select an account to view expense analysis
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="text-center py-8 text-muted-foreground">
+        Loading transaction data...
+      </div>
+    );
+  }
+
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <Card className="p-6 animate-fadeIn delay-200">
@@ -43,11 +97,11 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
                 fill="#8884d8"
                 dataKey="value"
               >
-                {categoryData.map((entry, index) => (
+                {categoryData.map((entry: any, index: number) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip formatter={(value: number) => formatCurrency(value)} />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
@@ -55,17 +109,15 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
       </Card>
 
       <Card className="p-6 animate-fadeIn delay-300">
-        <h3 className="text-xl font-semibold mb-4">
-          {timeframe === "monthly" ? "Monthly" : "Yearly"} Trends
-        </h3>
+        <h3 className="text-xl font-semibold mb-4">Monthly Trends</h3>
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={trendData}>
+            <BarChart data={monthlyData}>
               <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
+              <YAxis tickFormatter={(value) => formatCurrency(value)} />
+              <Tooltip formatter={(value: number) => formatCurrency(value)} />
               <Legend />
-              <Bar dataKey="amount" fill="#8884d8" />
+              <Bar dataKey="amount" fill="#0f434e" />
             </BarChart>
           </ResponsiveContainer>
         </div>

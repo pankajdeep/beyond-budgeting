@@ -5,9 +5,30 @@ import { ExpenseCharts } from "@/components/budget/ExpenseCharts";
 import { BudgetSuggestions } from "@/components/budget/BudgetSuggestions";
 import { ProductRecommendations } from "@/components/budget/ProductRecommendations";
 import { Header } from "@/components/layout/Header";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const Budget = () => {
-  const [timeframe, setTimeframe] = useState<"monthly" | "yearly">("monthly");
+  const [selectedAccount, setSelectedAccount] = useState<string>("");
+
+  const { data: accounts } = useQuery({
+    queryKey: ['userAccounts'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('user_accounts')
+        .select('*')
+      
+      if (error) throw error;
+      return data;
+    },
+  });
 
   return (
     <>
@@ -32,26 +53,28 @@ const Budget = () => {
               <Card className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-2xl font-semibold">Expense Overview</h2>
-                  <div className="flex gap-2">
-                    <TabsList>
-                      <TabsTrigger
-                        value="monthly"
-                        onClick={() => setTimeframe("monthly")}
-                        className={timeframe === "monthly" ? "bg-primary text-white" : ""}
-                      >
-                        Monthly
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="yearly"
-                        onClick={() => setTimeframe("yearly")}
-                        className={timeframe === "yearly" ? "bg-primary text-white" : ""}
-                      >
-                        Yearly
-                      </TabsTrigger>
-                    </TabsList>
+                  <div className="w-[200px]">
+                    <Select
+                      value={selectedAccount}
+                      onValueChange={setSelectedAccount}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select account" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {accounts?.map((account) => (
+                          <SelectItem 
+                            key={account.account_id} 
+                            value={account.account_id}
+                          >
+                            {account.account_type} - {account.account_number}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
-                <ExpenseCharts timeframe={timeframe} />
+                <ExpenseCharts accountId={selectedAccount} />
               </Card>
             </TabsContent>
 
