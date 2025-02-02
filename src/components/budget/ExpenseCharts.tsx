@@ -111,10 +111,13 @@ export const ExpenseCharts = ({ accountId }: ExpenseChartsProps) => {
       <Card className="p-6 animate-fadeIn delay-300">
         <h3 className="text-xl font-semibold mb-4">Monthly Trends</h3>
         <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={monthlyData}>
+          <ResponsiveContainer width="95%" height="100%">
+            <BarChart data={monthlyData} margin={{ right: 10, left: 10 }}>
               <XAxis dataKey="name" />
-              <YAxis tickFormatter={(value) => formatCurrency(value)} />
+              <YAxis 
+                tickFormatter={(value) => formatCurrency(value)} 
+                width={80}
+              />
               <Tooltip formatter={(value: number) => formatCurrency(value)} />
               <Legend />
               <Bar dataKey="amount" fill="#0f434e" />
