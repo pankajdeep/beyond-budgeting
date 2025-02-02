@@ -127,8 +127,8 @@ export const Header = () => {
             <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-accent">
               <Avatar className="h-10 w-10">
                 <AvatarImage src="/placeholder.svg" alt="Profile" />
-                <AvatarFallback className="bg-primary/10">
-                  <User className="h-5 w-5 text-primary" />
+                <AvatarFallback>
+                  <User className="h-6 w-6 text-primary" />
                 </AvatarFallback>
               </Avatar>
             </Button>
