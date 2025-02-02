@@ -1,0 +1,116 @@
+import { useRef, useState } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Text } from '@react-three/drei';
+import * as THREE from 'three';
+import { formatCurrency } from '@/lib/utils';
+
+interface CategoryData {
+  name: string;
+  value: number;
+  color: string;
+}
+
+interface ThreeDChartProps {
+  data: CategoryData[];
+  onCategoryClick?: (category: string) => void;
+}
+
+const SpendingShape = ({ data, onCategoryClick }: ThreeDChartProps) => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
+  
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += 0.001;
+    }
+  });
+
+  const totalValue = data.reduce((sum, item) => sum + item.value, 0);
+  const segments = data.map((item, index) => {
+    const angle = (item.value / totalValue) * Math.PI * 2;
+    return {
+      ...item,
+      angle,
+      startAngle: index === 0 ? 0 : data
+        .slice(0, index)
+        .reduce((sum, prev) => sum + (prev.value / totalValue) * Math.PI * 2, 0),
+    };
+  });
+
+  return (
+    <group>
+      {segments.map((segment, index) => {
+        const radius = 2;
+        const height = (segment.value / totalValue) * 2 + 0.5;
+        const segments = 32;
+        
+        const shape = new THREE.Shape();
+        shape.moveTo(0, 0);
+        shape.absarc(0, 0, radius, segment.startAngle, segment.startAngle + segment.angle, false);
+        shape.lineTo(0, 0);
+
+        const extrudeSettings = {
+          steps: 1,
+          depth: height,
+          bevelEnabled: true,
+          bevelThickness: 0.1,
+          bevelSize: 0.1,
+          bevelSegments: 5
+        };
+
+        return (
+          <mesh
+            key={index}
+            ref={meshRef}
+            position={[0, 0, 0]}
+            onPointerOver={(e) => {
+              e.stopPropagation();
+              setHovered(segment.name);
+            }}
+            onPointerOut={() => setHovered(null)}
+            onClick={() => onCategoryClick?.(segment.name)}
+          >
+            <extrudeGeometry args={[shape, extrudeSettings]} />
+            <meshPhongMaterial
+              color={segment.color}
+              opacity={hovered === segment.name ? 0.8 : 0.6}
+              transparent
+              shininess={30}
+            />
+            {hovered === segment.name && (
+              <Text
+                position={[
+                  Math.cos(segment.startAngle + segment.angle / 2) * (radius + 0.5),
+                  Math.sin(segment.startAngle + segment.angle / 2) * (radius + 0.5),
+                  height + 0.5
+                ]}
+                fontSize={0.3}
+                color="white"
+                anchorX="center"
+                anchorY="middle"
+              >
+                {formatCurrency(segment.value)}
+              </Text>
+            )}
+          </mesh>
+        );
+      })}
+    </group>
+  );
+};
+
+export const ThreeDChart = ({ data, onCategoryClick }: ThreeDChartProps) => {
+  return (
+    <div className="h-[400px] w-full">
+      <Canvas
+        camera={{ position: [0, 0, 10], fov: 45 }}
+        className="w-full h-full"
+      >
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
+        <SpendingShape data={data} onCategoryClick={onCategoryClick} />
+        <OrbitControls enableZoom={true} enablePan={false} />
+      </Canvas>
+    </div>
+  );
+};
