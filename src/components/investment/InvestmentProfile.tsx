@@ -129,7 +129,7 @@ export const InvestmentProfile = () => {
 
   if (profileLoading || transactionsLoading) {
     return (
-      <Card className="animate-pulse">
+      <Card className="animate-pulse hover:shadow-lg transition-all duration-300 hover:border-primary">
         <CardHeader>
           <CardTitle>Investment Profile</CardTitle>
         </CardHeader>
@@ -145,7 +145,7 @@ export const InvestmentProfile = () => {
   const allocation = allocationStrategies[riskProfile];
 
   return (
-    <Card>
+    <Card className="hover:shadow-lg transition-all duration-300 hover:border-primary">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Shield className="h-6 w-6 text-primary" />

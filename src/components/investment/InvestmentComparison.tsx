@@ -92,7 +92,7 @@ export const InvestmentComparison = () => {
         ))}
       </div>
 
-      <div className="rounded-lg border">
+      <div className="rounded-lg border hover:shadow-lg transition-all duration-300 hover:border-primary">
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary">

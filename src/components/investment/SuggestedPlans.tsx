@@ -82,7 +82,7 @@ export const SuggestedPlans = () => {
 
       <div className="grid md:grid-cols-3 gap-6">
         {plans.map((plan) => (
-          <Card key={plan.name} className="hover:shadow-lg transition-shadow flex flex-col">
+          <Card key={plan.name} className="hover:shadow-lg transition-all duration-300 hover:border-primary flex flex-col">
             <CardHeader>
               <div className="flex justify-between items-start">
                 <div className="space-y-2">
