@@ -43,7 +43,11 @@ export const FinancialGoals = () => {
                     ${goal.current.toLocaleString()} / ${goal.target.toLocaleString()}
                   </span>
                 </div>
-                <Progress value={progress} className="h-2" indicatorClassName={goal.color} />
+                <Progress 
+                  value={progress} 
+                  className="h-2" 
+                  indicatorClassName={goal.color} 
+                />
               </div>
             );
           })}
