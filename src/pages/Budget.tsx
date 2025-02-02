@@ -39,7 +39,7 @@ const Budget = () => {
       <Header />
       <div className="w-full px-4 py-8 space-y-8 animate-fadeIn mt-16">
         <div className="max-w-[1400px] mx-auto space-y-2">
-          <h1 className="text-4xl font-bold text-[#ffcb05]">
+          <h1 className="text-4xl font-bold text-[#000000]">
             Budget & Expenses
           </h1>
           <p className="text-muted-foreground hover:text-secondary transition-colors duration-300">
