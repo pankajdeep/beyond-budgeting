@@ -57,7 +57,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarContent className="pt-16"> {/* Added padding-top to account for header height */}
+      <SidebarContent className="pt-16">
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -67,7 +67,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     isActive={location.pathname === item.url}
                     onClick={() => navigate(item.url)}
-                    className="data-[active=true]:bg-blue-500 data-[active=true]:text-white"
+                    className="data-[active=true]:bg-secondary data-[active=true]:text-white hover:bg-secondary/90 hover:text-white"
                   >
                     <item.icon className="h-4 w-4" />
                     <span>{item.title}</span>
