@@ -161,7 +161,7 @@
   }
 
   .bg-secondary a, .bg-[#0f434e] a {
-    @apply text-primary hover:text-primary-dark transition-colors;
+    @apply text-primary hover:text-primary hover:text-primary transition-colors;
   }
 }
 

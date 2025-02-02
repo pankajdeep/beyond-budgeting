@@ -42,6 +42,7 @@ export default {
         primary: {
           DEFAULT: "#ffcb05",
           hover: "#0f434e",
+          dark: "#b38f00", // Added dark variant
           50: "#FFFBEB",
           100: "#FEF3C7",
           200: "#FDE68A",
