@@ -83,17 +83,17 @@ const Dashboard = () => {
         throw error;
       }
 
-      // Map the data to match the Transaction type
-      const mappedTransactions = data?.map(transaction => ({
+      // For SmartInsights component
+      const simplifiedTransactions = data?.map(transaction => ({
         amount: transaction.amount,
         transaction_type: transaction.transaction_type,
-        date: transaction.transaction_date, // Map transaction_date to date
+        date: transaction.transaction_date,
         category: transaction.category,
         description: transaction.description
       }));
 
-      console.log("Transactions data:", mappedTransactions);
-      return mappedTransactions;
+      console.log("Transactions data:", data);
+      return data;
     },
   });
 
@@ -131,7 +131,7 @@ const Dashboard = () => {
           <FinancialSummary accounts={accounts || []} />
           
           <SmartInsights 
-            transactions={transactions || []} 
+            transactions={simplifiedTransactions || []} 
             monthlyIncome={monthlyIncome || 3000}
           />
           

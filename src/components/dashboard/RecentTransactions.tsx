@@ -13,8 +13,8 @@ import { format } from "date-fns";
 interface Transaction {
   transaction_id: string;
   amount: number;
-  description: string;
-  category: string;
+  description: string | null;
+  category: string | null;
   transaction_date: string;
   transaction_type: string;
   user_accounts: {
