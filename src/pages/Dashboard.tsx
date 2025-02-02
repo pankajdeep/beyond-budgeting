@@ -5,6 +5,7 @@ import { NetWorthOverview } from "@/components/dashboard/NetWorthOverview";
 import { RecentTransactions } from "@/components/dashboard/RecentTransactions";
 import { SpendingAnalysis } from "@/components/dashboard/SpendingAnalysis";
 import { FinancialGoals } from "@/components/dashboard/FinancialGoals";
+import { SmartInsights } from "@/components/dashboard/SmartInsights";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
@@ -99,6 +100,11 @@ const Dashboard = () => {
     return null;
   }
 
+  // Calculate monthly income (in a real app, this would come from a more sophisticated calculation)
+  const monthlyIncome = accounts?.reduce((sum, account) => {
+    return sum + (account.interest_rate || 0) * account.balance / 12;
+  }, 3000); // Base income of 3000 plus interest income
+
   return (
     <>
       <Header />
@@ -114,6 +120,11 @@ const Dashboard = () => {
 
         <div className="grid gap-8">
           <FinancialSummary accounts={accounts || []} />
+          
+          <SmartInsights 
+            transactions={transactions || []} 
+            monthlyIncome={monthlyIncome || 3000}
+          />
           
           <div className="grid md:grid-cols-2 gap-8">
             <NetWorthOverview accounts={accounts || []} />
