@@ -2,14 +2,34 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { FinancialMetrics } from "@/components/dashboard/FinancialMetrics";
 import { RecommendationsList } from "@/components/recommendations/RecommendationsList";
-import { Loader2, LogOut } from "lucide-react";
+import { Loader2, Settings, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   const { data: profile, isLoading: isLoadingProfile } = useQuery({
     queryKey: ["profile"],
@@ -34,7 +54,6 @@ const Dashboard = () => {
 
       console.log("Profile data:", data);
 
-      // Check if profile is incomplete
       if (!data.monthly_income || !data.monthly_expenses || !data.financial_goals || !data.risk_tolerance || !data.investment_horizon) {
         console.log("Profile incomplete, redirecting to onboarding...");
         navigate("/onboarding");
@@ -91,7 +110,6 @@ const Dashboard = () => {
     );
   }
 
-  // If profile is null (due to redirection), don't render the dashboard
   if (!profile) {
     return null;
   }
@@ -105,10 +123,32 @@ const Dashboard = () => {
             Track your progress and get personalized recommendations
           </p>
         </div>
-        <Button variant="outline" onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" />
-          Logout
-        </Button>
+        
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+              <Avatar className="h-10 w-10">
+                <AvatarImage src="/placeholder.svg" />
+                <AvatarFallback>{profile?.full_name?.charAt(0) || "U"}</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="end">
+            <DropdownMenuItem onClick={() => navigate("/profile")}>
+              <User className="mr-2 h-4 w-4" />
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate("/settings")}>
+              <Settings className="mr-2 h-4 w-4" />
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setShowLogoutDialog(true)}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <FinancialMetrics
@@ -118,6 +158,21 @@ const Dashboard = () => {
       />
 
       <RecommendationsList />
+
+      <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You will need to sign in again to access your account.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleLogout}>Yes, Logout</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
