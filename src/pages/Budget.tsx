@@ -39,7 +39,7 @@ const Budget = () => {
       <Header />
       <div className="w-full px-4 py-8 space-y-8 animate-fadeIn mt-16">
         <div className="max-w-[1400px] mx-auto space-y-2">
-          <h1 className="text-4xl font-bold" style={{ color: '#ffcb05' }}>Budget & Expenses</h1>
+          <h1 className="text-4xl font-bold">Budget & Expenses</h1>
           <p className="text-muted-foreground">
             Track your spending and get personalized financial insights
           </p>
@@ -47,16 +47,16 @@ const Budget = () => {
 
         <div className="max-w-[1400px] mx-auto">
           <Tabs defaultValue="charts" className="space-y-4">
-            <TabsList className="w-full justify-start">
-              <TabsTrigger value="charts" className="text-lg" style={{ color: '#ffcb05' }}>Expense Analysis</TabsTrigger>
-              <TabsTrigger value="suggestions" className="text-lg" style={{ color: '#ffcb05' }}>AI-Powered Budget Insights</TabsTrigger>
-              <TabsTrigger value="products" className="text-lg" style={{ color: '#ffcb05' }}>Product Recommendations</TabsTrigger>
+            <TabsList>
+              <TabsTrigger value="charts">Expense Analysis</TabsTrigger>
+              <TabsTrigger value="suggestions">AI-Powered Budget Insights</TabsTrigger>
+              <TabsTrigger value="products">Product Recommendations</TabsTrigger>
             </TabsList>
 
             <TabsContent value="charts" className="space-y-4">
               <Card className="p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-semibold" style={{ color: '#ffcb05' }}>Expense Overview</h2>
+                  <h2 className="text-2xl font-semibold">Expense Overview</h2>
                   <div className="w-[200px]">
                     <Select
                       value={selectedAccount}
