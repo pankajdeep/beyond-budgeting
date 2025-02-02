@@ -63,11 +63,11 @@ export const Header = () => {
   return (
     <>
       <AppSidebar />
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#ffcb05] border-b shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <SidebarTrigger />
-            <h1 className="text-xl font-bold">Money Mindfully</h1>
+            <h1 className="text-xl font-bold text-secondary">Money Mindfully</h1>
           </div>
 
           <DropdownMenu>
