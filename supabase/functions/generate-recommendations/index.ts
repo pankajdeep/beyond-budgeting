@@ -8,23 +8,48 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { userId, financialData } = await req.json();
-    
-    console.log('Generating recommendations for user:', userId);
-    console.log('Financial data:', financialData);
+    // Get the user's session
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+    );
+
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      throw new Error('No authorization header');
+    }
+
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(
+      authHeader.replace('Bearer ', '')
+    );
+
+    if (authError || !user) {
+      throw new Error('Not authenticated');
+    }
+
+    // Fetch user's profile data
+    const { data: profile, error: profileError } = await supabaseClient
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (profileError || !profile) {
+      throw new Error('Profile not found');
+    }
 
     // Create OpenAI prompt based on user's financial data
     const prompt = `As a financial advisor, analyze this user's financial data and provide 3 personalized recommendations:
-    Monthly Income: $${financialData.monthlyIncome}
-    Risk Tolerance: ${financialData.riskTolerance}
-    Current Goals: ${financialData.goals.join(', ')}
-    Recent Transactions: ${financialData.recentTransactions}
+    Monthly Income: $${profile.monthly_income}
+    Monthly Expenses: $${profile.monthly_expenses}
+    Risk Tolerance: ${profile.risk_tolerance}
+    Financial Goals: ${profile.financial_goals}
+    Investment Horizon: ${profile.investment_horizon}
     
     Provide 3 specific, actionable recommendations in JSON format with the following structure:
     {
@@ -56,25 +81,24 @@ serve(async (req) => {
     const data = await response.json();
     console.log('OpenAI response:', data);
 
+    if (!data.choices?.[0]?.message?.content) {
+      throw new Error('Invalid response from OpenAI');
+    }
+
     const recommendations = JSON.parse(data.choices[0].message.content);
 
-    // Store recommendations in the database
-    const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    // Delete old recommendations for this user
-    await supabase
+    // Delete old recommendations
+    await supabaseClient
       .from('recommendations')
       .delete()
-      .eq('user_id', userId);
+      .eq('user_id', user.id);
 
     // Insert new recommendations
-    const { error } = await supabase
+    const { error: insertError } = await supabaseClient
       .from('recommendations')
       .insert(
         recommendations.recommendations.map((rec: any) => ({
-          user_id: userId,
+          user_id: user.id,
           title: rec.title,
           description: rec.description,
           recommendation_type: rec.type,
@@ -82,11 +106,11 @@ serve(async (req) => {
         }))
       );
 
-    if (error) {
-      throw error;
+    if (insertError) {
+      throw insertError;
     }
 
-    return new Response(JSON.stringify(recommendations), {
+    return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
