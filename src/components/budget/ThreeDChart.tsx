@@ -18,33 +18,49 @@ interface ThreeDChartProps {
 const SpendingShape = ({ data, onCategoryClick }: ThreeDChartProps) => {
   const [hovered, setHovered] = useState<string | null>(null);
   
-  if (!data || data.length === 0) {
-    console.log('No data available for SpendingShape');
+  // Early return if data is invalid
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    console.log('Invalid or empty data for SpendingShape');
     return null;
   }
 
-  const totalValue = data.reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+  // Safely calculate total value with proper type checking
+  const totalValue = data.reduce((sum, item) => {
+    const value = typeof item?.value === 'number' ? item.value : 0;
+    return sum + value;
+  }, 0);
   
   if (totalValue <= 0) {
     console.log('Total value is 0 or negative');
     return null;
   }
 
+  // Calculate segments with proper type safety
   const segments = data.map((item, index) => {
-    const value = Number(item.value) || 0;
+    const value = typeof item?.value === 'number' ? item.value : 0;
     const angle = (value / totalValue) * Math.PI * 2;
+    const startAngle = index === 0 ? 0 : data
+      .slice(0, index)
+      .reduce((sum, prev) => {
+        const prevValue = typeof prev?.value === 'number' ? prev.value : 0;
+        return sum + (prevValue / totalValue) * Math.PI * 2;
+      }, 0);
+
     return {
       ...item,
       angle,
-      startAngle: index === 0 ? 0 : data
-        .slice(0, index)
-        .reduce((sum, prev) => sum + ((Number(prev.value) || 0) / totalValue) * Math.PI * 2, 0),
+      startAngle,
     };
   });
 
   return (
     <group>
       {segments.map((segment, index) => {
+        if (!segment?.name || typeof segment?.value !== 'number') {
+          console.log('Invalid segment data:', segment);
+          return null;
+        }
+
         const radius = 2;
         const height = segment.value > 0 ? (segment.value / totalValue) * 2 + 0.5 : 0.5;
         const segments = 32;
@@ -74,14 +90,14 @@ const SpendingShape = ({ data, onCategoryClick }: ThreeDChartProps) => {
             onPointerOut={() => setHovered(null)}
             onClick={(e) => {
               e.stopPropagation();
-              if (onCategoryClick) {
+              if (onCategoryClick && segment.name) {
                 onCategoryClick(segment.name);
               }
             }}
           >
             <extrudeGeometry args={[shape, extrudeSettings]} />
             <meshPhongMaterial
-              color={segment.color}
+              color={segment.color || '#808080'}
               opacity={hovered === segment.name ? 0.8 : 0.6}
               transparent
               shininess={30}
@@ -111,8 +127,12 @@ const SpendingShape = ({ data, onCategoryClick }: ThreeDChartProps) => {
 export const ThreeDChart = ({ data, onCategoryClick }: ThreeDChartProps) => {
   console.log('ThreeDChart received data:', data);
 
-  if (!data || data.length === 0) {
-    return <div className="h-[400px] w-full flex items-center justify-center">No data available</div>;
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return (
+      <div className="h-[400px] w-full flex items-center justify-center text-muted-foreground">
+        No data available
+      </div>
+    );
   }
 
   return (
