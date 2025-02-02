@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Menu, User, Settings, LogOut } from "lucide-react";
+import { Menu, User, Settings, LogOut, LayoutDashboard, BarChart } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,8 +45,16 @@ export const Header = () => {
   });
 
   const menuItems = [
-    { label: "Dashboard", path: "/dashboard" },
-    { label: "Budget & Expense", path: "/budget" },
+    { 
+      label: "Dashboard", 
+      path: "/dashboard",
+      icon: LayoutDashboard 
+    },
+    { 
+      label: "Budget & Expense", 
+      path: "/budget",
+      icon: BarChart 
+    },
   ];
 
   const handleLogout = async () => {
@@ -88,12 +96,13 @@ export const Header = () => {
                 <DropdownMenuItem
                   key={item.path}
                   className={cn(
-                    "cursor-pointer transition-colors",
+                    "cursor-pointer transition-colors flex items-center gap-2",
                     location.pathname === item.path &&
                       "bg-accent text-accent-foreground"
                   )}
                   onClick={() => navigate(item.path)}
                 >
+                  <item.icon className="h-4 w-4" />
                   {item.label}
                 </DropdownMenuItem>
               ))}
