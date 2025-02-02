@@ -1,113 +1,142 @@
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Menu, User, Settings, LogOut, LayoutDashboard, BarChart } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Menu, LogOut, LayoutDashboard, PiggyBank, Settings, UserCircle, LineChart } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 export const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { toast } = useToast();
 
-  const handleSignOut = async () => {
+  const { data: profile } = useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate("/signin");
+        return null;
+      }
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching profile:", error);
+        throw error;
+      }
+
+      return data;
+    },
+  });
+
+  const menuItems = [
+    { 
+      label: "Dashboard", 
+      path: "/dashboard",
+      icon: LayoutDashboard 
+    },
+    { 
+      label: "Budget & Expense", 
+      path: "/budget",
+      icon: BarChart 
+    },
+  ];
+
+  const handleLogout = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      navigate("/signin");
+      await supabase.auth.signOut();
       toast({
-        title: "Signed out successfully",
-        description: "You have been signed out of your account.",
+        title: "Logged out successfully",
+        description: "Come back soon!",
       });
-    } catch (error) {
-      console.error("Error signing out:", error);
+      navigate("/signin");
+    } catch (error: any) {
       toast({
-        title: "Error signing out",
-        description: "There was a problem signing out. Please try again.",
+        title: "Error logging out",
+        description: error.message,
         variant: "destructive",
       });
     }
   };
 
-  const menuItems = [
-    {
-      label: "Dashboard",
-      icon: LayoutDashboard,
-      href: "/dashboard",
-    },
-    {
-      label: "Budget & Expense",
-      icon: PiggyBank,
-      href: "/budget",
-    },
-    {
-      label: "Investment",
-      icon: LineChart,
-      href: "/investment",
-    },
-    {
-      label: "Profile",
-      icon: UserCircle,
-      href: "/profile",
-    },
-    {
-      label: "Settings",
-      icon: Settings,
-      href: "/settings",
-    },
-  ];
-
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="mr-4 flex items-center gap-2">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="relative h-10 w-10 rounded-full hover:bg-accent"
+              >
                 <Menu className="h-5 w-5" />
               </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-              <nav className="flex flex-col gap-2">
-                {menuItems.map((item) => (
-                  <Button
-                    key={item.href}
-                    variant="ghost"
-                    className="justify-start"
-                    onClick={() => navigate(item.href)}
-                  >
-                    <item.icon className="mr-2 h-5 w-5" />
-                    {item.label}
-                  </Button>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
-
-          <span className="font-bold">Financial Wellness AI</span>
-        </div>
-
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <nav className="flex items-center space-x-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <UserCircle className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleSignOut}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign Out
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="start"
+              className="w-56 animate-in fade-in-0 zoom-in-95"
+            >
+              {menuItems.map((item) => (
+                <DropdownMenuItem
+                  key={item.path}
+                  className={cn(
+                    "cursor-pointer transition-colors flex items-center gap-2",
+                    location.pathname === item.path &&
+                      "bg-accent text-accent-foreground"
+                  )}
+                  onClick={() => navigate(item.path)}
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </nav>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <h1 className="text-xl font-bold">Money Mindfully</h1>
         </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-accent">
+              <Avatar className="h-10 w-10">
+                <AvatarImage src="/placeholder.svg" />
+                <AvatarFallback>{profile?.full_name?.charAt(0) || "U"}</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56 animate-in fade-in-0 zoom-in-95" align="end">
+            <DropdownMenuItem onClick={() => navigate("/profile")}>
+              <User className="mr-2 h-4 w-4" />
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate("/settings")}>
+              <Settings className="mr-2 h-4 w-4" />
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
