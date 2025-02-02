@@ -52,15 +52,15 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-[#003366] font-roboto">
+    <div className="min-h-screen bg-[#003366] text-white font-roboto">
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-100 opacity-90" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#003366] to-[#004080] opacity-90" />
         <div className="relative z-10 max-w-4xl mx-auto text-center animate-on-load">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fadeIn">
             Empower Your Financial Future with AI
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-[#003366]/80 animate-fadeIn delay-200">
+          <p className="text-xl md:text-2xl mb-8 text-white/80 animate-fadeIn delay-200">
             Smart budgeting, personalized investment guidance, and expert financial insights—all in one place.
           </p>
           <Button
@@ -73,20 +73,20 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-[#004080]">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-[#003366] mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">
             Revolutionize Your Financial Journey
           </h2>
           <Carousel className="w-full max-w-5xl mx-auto">
             <CarouselContent>
               {features.map((feature, index) => (
                 <CarouselItem key={index} className="md:basis-1/3">
-                  <Card className="p-6 h-full bg-gray-50 border-none hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                  <Card className="p-6 h-full bg-[#003366]/50 border-none hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <div className="flex flex-col items-center text-center">
                       <div className="mb-4">{feature.icon}</div>
-                      <h3 className="text-xl font-semibold mb-2 text-[#003366]">{feature.title}</h3>
-                      <p className="text-[#003366]/70">{feature.description}</p>
+                      <h3 className="text-xl font-semibold mb-2 text-white">{feature.title}</h3>
+                      <p className="text-white/70">{feature.description}</p>
                     </div>
                   </Card>
                 </CarouselItem>
@@ -99,41 +99,41 @@ const Index = () => {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-[#003366]">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <Sun className="w-16 h-16 text-[#FFCD00] mx-auto mb-8" />
-          <h2 className="text-3xl md:text-4xl font-bold text-[#003366] mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
             Why Choose Our AI Companion?
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="p-6 bg-white rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
-              <h3 className="text-xl font-semibold text-[#003366] mb-4">Advanced AI Technology</h3>
-              <p className="text-[#003366]/70">Cutting-edge algorithms that learn and adapt to your financial patterns</p>
+            <div className="p-6 bg-[#004080] rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
+              <h3 className="text-xl font-semibold text-white mb-4">Advanced AI Technology</h3>
+              <p className="text-white/70">Cutting-edge algorithms that learn and adapt to your financial patterns</p>
             </div>
-            <div className="p-6 bg-white rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
-              <h3 className="text-xl font-semibold text-[#003366] mb-4">Personalized Insights</h3>
-              <p className="text-[#003366]/70">Tailored recommendations based on your unique financial situation</p>
+            <div className="p-6 bg-[#004080] rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
+              <h3 className="text-xl font-semibold text-white mb-4">Personalized Insights</h3>
+              <p className="text-white/70">Tailored recommendations based on your unique financial situation</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-[#004080]">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-[#003366] mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">
             What Our Users Say
           </h2>
           <Carousel className="w-full max-w-5xl mx-auto">
             <CarouselContent>
               {testimonials.map((testimonial, index) => (
                 <CarouselItem key={index} className="md:basis-1/2">
-                  <Card className="p-6 h-full bg-gray-50 border-none">
+                  <Card className="p-6 h-full bg-[#003366]/50 border-none">
                     <div className="flex flex-col h-full">
-                      <p className="text-[#003366]/70 mb-4 flex-grow">{testimonial.content}</p>
+                      <p className="text-white/70 mb-4 flex-grow">{testimonial.content}</p>
                       <div>
-                        <p className="font-semibold text-[#003366]">{testimonial.name}</p>
-                        <p className="text-sm text-[#003366]/60">{testimonial.role}</p>
+                        <p className="font-semibold text-white">{testimonial.name}</p>
+                        <p className="text-sm text-white/60">{testimonial.role}</p>
                       </div>
                     </div>
                   </Card>
@@ -147,7 +147,7 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-white text-[#003366] py-12">
+      <footer className="bg-[#003366] text-white py-12">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
@@ -175,14 +175,14 @@ const Index = () => {
               </ul>
             </div>
           </div>
-          <div className="text-center pt-8 border-t border-gray-200">
+          <div className="text-center pt-8 border-t border-white/20">
             <p>&copy; 2024 Money Mindfully. All rights reserved.</p>
           </div>
         </div>
       </footer>
 
       {/* Sticky CTA */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg transform translate-y-full animate-slideUp md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 bg-[#003366] p-4 shadow-lg transform translate-y-full animate-slideUp md:hidden">
         <Button
           onClick={() => navigate("/signup")}
           className="w-full bg-[#FFCD00] hover:bg-[#FFD700] text-[#003366]"
