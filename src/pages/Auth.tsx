@@ -7,8 +7,10 @@ const Auth = () => {
   const isSignUp = location.pathname === "/signup";
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-secondary/20 p-4">
-      {isSignUp ? <SignUpForm /> : <SignInForm />}
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-background to-secondary/20">
+      <div className="w-full max-w-md mx-auto px-4">
+        {isSignUp ? <SignUpForm /> : <SignInForm />}
+      </div>
     </div>
   );
 };

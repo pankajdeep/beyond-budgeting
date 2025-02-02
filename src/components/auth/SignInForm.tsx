@@ -75,60 +75,62 @@ export const SignInForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-md p-6 space-y-6 animate-fadeIn">
-      <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Welcome Back</h1>
-        <p className="text-muted-foreground">
-          Sign in to access your dashboard
-        </p>
-      </div>
-      {showVerificationAlert && (
-        <Alert>
-          <AlertDescription>
-            Please check your email and verify your account before signing in. 
-            If you haven't received the verification email, try signing up again.
-          </AlertDescription>
-        </Alert>
-      )}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="john@example.com"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            required
-            disabled={isLoading}
-          />
+    <Card className="w-full animate-fadeIn">
+      <div className="p-6 space-y-6">
+        <div className="space-y-2 text-center">
+          <h1 className="text-3xl font-bold">Welcome Back</h1>
+          <p className="text-muted-foreground">
+            Sign in to access your dashboard
+          </p>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            required
-            disabled={isLoading}
-          />
+        {showVerificationAlert && (
+          <Alert>
+            <AlertDescription>
+              Please check your email and verify your account before signing in. 
+              If you haven't received the verification email, try signing up again.
+            </AlertDescription>
+          </Alert>
+        )}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="john@example.com"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              required
+              disabled={isLoading}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              required
+              disabled={isLoading}
+            />
+          </div>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Signing in..." : "Sign In"}
+          </Button>
+        </form>
+        <div className="space-y-2 text-center text-sm text-muted-foreground">
+          <p>
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-primary hover:underline">
+              Sign up
+            </Link>
+          </p>
         </div>
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Signing in..." : "Sign In"}
-        </Button>
-      </form>
-      <div className="space-y-2 text-center text-sm text-muted-foreground">
-        <p>
-          Don't have an account?{" "}
-          <Link to="/signup" className="text-primary hover:underline">
-            Sign up
-          </Link>
-        </p>
       </div>
     </Card>
   );
