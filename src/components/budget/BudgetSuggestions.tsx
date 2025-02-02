@@ -1,56 +1,124 @@
+import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
   ChevronRight, 
   Utensils, 
   CreditCard, 
-  PiggyBank,
   TrendingUp,
   AlertCircle,
   Repeat,
   Bell
 } from "lucide-react";
-
-const suggestions = [
-  {
-    title: "Spending Patterns Analysis",
-    description: "Your dining expenses have increased by 25% this month. Consider meal prepping to reduce costs.",
-    icon: TrendingUp,
-    action: "View Analysis",
-  },
-  {
-    title: "Budget Auto-Adjustments",
-    description: "Entertainment budget exceeded. We can reallocate funds from your shopping category.",
-    icon: Repeat,
-    action: "Adjust Budget",
-  },
-  {
-    title: "What's Draining Your Money?",
-    description: "Subscription services total $95/month. Review and cancel unused subscriptions.",
-    icon: AlertCircle,
-    action: "Review Expenses",
-  },
-  {
-    title: "Custom Spending Alerts",
-    description: "Set up personalized alerts when spending exceeds your weekly or monthly limits.",
-    icon: Bell,
-    action: "Set Alerts",
-  },
-  {
-    title: "Reduce Dining Expenses",
-    description: "Consider cooking more meals at home to save on dining expenses.",
-    icon: Utensils,
-    action: "View Details",
-  },
-  {
-    title: "Optimize Monthly Subscriptions",
-    description: "Review and cancel unused subscription services.",
-    icon: CreditCard,
-    action: "Review Now",
-  }
-];
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
 export const BudgetSuggestions = () => {
+  const { data: transactions, isLoading } = useQuery({
+    queryKey: ["user-transactions"],
+    queryFn: async () => {
+      console.log("Fetching user transactions for budget insights");
+      const { data, error } = await supabase
+        .from("user_transactions")
+        .select("*")
+        .order("transaction_date", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching transactions:", error);
+        throw error;
+      }
+
+      console.log("Fetched transactions:", data);
+      return data;
+    },
+  });
+
+  const generateInsights = () => {
+    if (!transactions || transactions.length === 0) {
+      return [];
+    }
+
+    // Calculate total spending by category
+    const categoryTotals = transactions.reduce((acc, transaction) => {
+      const category = transaction.category || "Uncategorized";
+      if (transaction.transaction_type === "expense") {
+        acc[category] = (acc[category] || 0) + Math.abs(transaction.amount);
+      }
+      return acc;
+    }, {} as Record<string, number>);
+
+    console.log("Category totals:", categoryTotals);
+
+    // Calculate month-over-month changes
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+
+    const currentMonthTransactions = transactions.filter(
+      (t) => new Date(t.transaction_date).getMonth() === currentMonth
+    );
+    const lastMonthTransactions = transactions.filter(
+      (t) => new Date(t.transaction_date).getMonth() === lastMonth
+    );
+
+    const currentMonthTotal = currentMonthTransactions.reduce(
+      (sum, t) => sum + Math.abs(t.amount),
+      0
+    );
+    const lastMonthTotal = lastMonthTransactions.reduce(
+      (sum, t) => sum + Math.abs(t.amount),
+      0
+    );
+
+    const spendingChange = ((currentMonthTotal - lastMonthTotal) / lastMonthTotal) * 100;
+
+    // Generate insights based on the analysis
+    const insights = [
+      {
+        title: "Spending Patterns Analysis",
+        description: `Your total spending ${
+          spendingChange > 0 ? "increased" : "decreased"
+        } by ${Math.abs(spendingChange).toFixed(1)}% compared to last month.`,
+        icon: TrendingUp,
+        action: "View Analysis",
+      },
+      {
+        title: "Category Breakdown",
+        description: `Your highest spending category is ${
+          Object.entries(categoryTotals).sort((a, b) => b[1] - a[1])[0]?.[0]
+        }.`,
+        icon: Repeat,
+        action: "View Categories",
+      },
+      {
+        title: "Recent Transactions Alert",
+        description: `You have ${
+          currentMonthTransactions.length
+        } transactions this month totaling $${currentMonthTotal.toFixed(2)}.`,
+        icon: AlertCircle,
+        action: "View Details",
+      },
+      {
+        title: "Budget Recommendations",
+        description: "Set up custom budget alerts to track your spending in real-time.",
+        icon: Bell,
+        action: "Set Alerts",
+      }
+    ];
+
+    return insights;
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  const suggestions = generateInsights();
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-end">
@@ -60,7 +128,7 @@ export const BudgetSuggestions = () => {
         </Button>
       </div>
       
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
         {suggestions.map((suggestion, index) => (
           <Card
             key={suggestion.title}
