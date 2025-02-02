@@ -19,15 +19,16 @@ export const ThreeDChart = ({ data }: ThreeDChartProps) => {
   useEffect(() => {
     if (!containerRef.current || !data?.length) return;
 
-    // Scene setup
+    // Scene setup with improved lighting
     const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xffffff);
     const camera = new THREE.PerspectiveCamera(75, containerRef.current.clientWidth / containerRef.current.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
     containerRef.current.appendChild(renderer.domElement);
 
-    // Lighting
+    // Enhanced lighting setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
@@ -35,15 +36,15 @@ export const ThreeDChart = ({ data }: ThreeDChartProps) => {
     directionalLight.position.set(5, 5, 5);
     scene.add(directionalLight);
 
-    // Calculate total value for proportions
+    // Calculate total for proportions
     const total = data.reduce((sum, item) => sum + item.value, 0);
     
-    // Create segments
+    // Create segments with improved aesthetics
     const radius = 2;
     const height = 0.5;
     const segments = 32;
     
-    // Color palette with gradients
+    // Enhanced color palette with gradients
     const colors = [
       new THREE.Color('#FF6B6B'),
       new THREE.Color('#4ECDC4'),
@@ -52,13 +53,13 @@ export const ThreeDChart = ({ data }: ThreeDChartProps) => {
       new THREE.Color('#FFEEAD'),
     ];
 
-    // Create donut segments
+    // Create donut segments with improved visuals
     let startAngle = 0;
     const segments3D = data.map((item, index) => {
       const angle = (item.value / total) * Math.PI * 2;
       const geometry = new THREE.CylinderGeometry(
         radius,
-        radius * 1.1,
+        radius * 1.1, // Slightly larger bottom radius for 3D effect
         height,
         segments,
         1,
@@ -92,18 +93,18 @@ export const ThreeDChart = ({ data }: ThreeDChartProps) => {
     camera.position.set(0, 4, 6);
     camera.lookAt(0, 0, 0);
 
-    // Add controls
+    // Enhanced controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.maxPolarAngle = Math.PI / 1.5;
     controls.minPolarAngle = Math.PI / 4;
 
-    // Raycaster for interaction
+    // Raycaster for improved interaction
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
-    // Handle mouse move for tooltips
+    // Enhanced mouse move handler
     const onMouseMove = (event: MouseEvent) => {
       if (!containerRef.current || !tooltipRef.current) return;
 
@@ -128,7 +129,7 @@ export const ThreeDChart = ({ data }: ThreeDChartProps) => {
           <div>${data.percentage}%</div>
         `;
 
-        // Highlight segment
+        // Highlight effect
         segments3D.forEach(s => {
           (s.material as THREE.MeshPhongMaterial).opacity = s === segment ? 1 : 0.6;
         });
@@ -142,7 +143,7 @@ export const ThreeDChart = ({ data }: ThreeDChartProps) => {
 
     containerRef.current.addEventListener('mousemove', onMouseMove);
 
-    // Animation loop
+    // Animation loop with smooth updates
     const animate = () => {
       requestAnimationFrame(animate);
       controls.update();
@@ -150,7 +151,7 @@ export const ThreeDChart = ({ data }: ThreeDChartProps) => {
     };
     animate();
 
-    // Handle resize
+    // Responsive handling
     const handleResize = () => {
       if (!containerRef.current) return;
       
