@@ -53,7 +53,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#003366] text-white">
+    <div className="min-h-screen bg-[#003366] text-white font-roboto">
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#003366] to-[#001830] opacity-90" />
