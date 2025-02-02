@@ -19,7 +19,7 @@ const Settings = () => {
         <h1 className="text-3xl font-bold mb-8">Settings</h1>
 
         <div className="space-y-6">
-          <Card className="p-6">
+          <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary">
             <div className="flex items-center gap-2 mb-4">
               <Bell className="h-5 w-5" />
               <h2 className="text-xl font-semibold">Notifications</h2>
@@ -46,7 +46,7 @@ const Settings = () => {
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary">
             <div className="flex items-center gap-2 mb-4">
               <Globe className="h-5 w-5" />
               <h2 className="text-xl font-semibold">Preferences</h2>
@@ -91,7 +91,7 @@ const Settings = () => {
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary">
             <div className="flex items-center gap-2 mb-4">
               <Lock className="h-5 w-5" />
               <h2 className="text-xl font-semibold">Security</h2>
@@ -112,7 +112,7 @@ const Settings = () => {
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary">
             <div className="flex items-center gap-2 mb-4">
               <Palette className="h-5 w-5" />
               <h2 className="text-xl font-semibold">Appearance</h2>

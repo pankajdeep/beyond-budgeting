@@ -9,7 +9,7 @@ interface UserProfileProps {
 
 export const UserProfile = ({ user }: UserProfileProps) => {
   return (
-    <Card>
+    <Card className="hover:shadow-lg transition-all duration-300 hover:border-primary">
       <CardHeader className="flex flex-row items-center gap-4">
         <Avatar className="h-16 w-16">
           <AvatarImage 

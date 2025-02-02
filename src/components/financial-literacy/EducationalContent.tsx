@@ -8,7 +8,6 @@ const articles = [
     title: "Smart Budgeting Strategies",
     description: "Learn effective techniques for managing your monthly expenses and saving more.",
     thumbnail: "/placeholder.svg",
-    videoUrl: "#",
     category: "Budgeting",
   },
   {
@@ -16,7 +15,6 @@ const articles = [
     title: "Investment Basics",
     description: "Understanding different investment options and how to build a balanced portfolio.",
     thumbnail: "/placeholder.svg",
-    videoUrl: "#",
     category: "Investing",
   },
   {
@@ -24,7 +22,6 @@ const articles = [
     title: "Debt Management Guide",
     description: "Strategies for managing and reducing debt effectively.",
     thumbnail: "/placeholder.svg",
-    videoUrl: "#",
     category: "Debt Management",
   },
   {
@@ -32,7 +29,6 @@ const articles = [
     title: "Planning for Retirement",
     description: "Essential steps to prepare for a comfortable retirement.",
     thumbnail: "/placeholder.svg",
-    videoUrl: "#",
     category: "Retirement",
   },
 ];
@@ -43,7 +39,7 @@ export const EducationalContent = () => {
       <h2 className="text-2xl font-semibold">Educational Resources</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {articles.map((article) => (
-          <Card key={article.id} className="group hover:shadow-lg transition-shadow duration-200">
+          <Card key={article.id} className="hover:shadow-lg transition-all duration-300 hover:border-primary">
             <CardHeader>
               <img
                 src={article.thumbnail}
