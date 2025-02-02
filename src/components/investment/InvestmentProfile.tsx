@@ -4,7 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { Shield, TrendingUp, DollarSign, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-type RiskProfile = 'Low' | 'Medium' | 'High';
+type RiskProfile = 'Low' | 'Moderate' | 'High';
 
 interface AllocationStrategy {
   stocks: number;
@@ -22,7 +22,7 @@ const allocationStrategies: Record<RiskProfile, AllocationStrategy> = {
     crypto: 0,
     cash: 10,
   },
-  Medium: {
+  Moderate: {
     stocks: 40,
     bonds: 30,
     mutualFunds: 20,
@@ -73,7 +73,7 @@ export const InvestmentProfile = () => {
 
   const determineRiskProfile = (): { profile: RiskProfile; reason: string } => {
     if (!profile || !transactions) {
-      return { profile: 'Medium', reason: 'Insufficient data for analysis' };
+      return { profile: 'Moderate', reason: 'Insufficient data for analysis' };
     }
 
     const age = profile.age;
@@ -120,10 +120,10 @@ export const InvestmentProfile = () => {
       };
     }
     
-    // Medium Risk Profile (Default)
+    // Moderate Risk Profile (Default)
     return {
-      profile: 'Medium',
-      reason: 'Based on your balanced age, income, and expense profile, a medium-risk investment approach offers a good balance of growth and stability.'
+      profile: 'Moderate',
+      reason: 'Based on your balanced age, income, and expense profile, a moderate-risk investment approach offers a good balance of growth and stability.'
     };
   };
 
@@ -158,7 +158,7 @@ export const InvestmentProfile = () => {
             <h3 className="text-lg font-semibold">Risk Tolerance Level</h3>
             <span className={`font-medium ${
               riskProfile === 'Low' ? 'text-blue-500' :
-              riskProfile === 'Medium' ? 'text-yellow-500' :
+              riskProfile === 'Moderate' ? 'text-yellow-500' :
               'text-red-500'
             }`}>
               {riskProfile} Risk
