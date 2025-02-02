@@ -3,15 +3,19 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
   ChevronRight, 
-  Utensils, 
-  CreditCard, 
   TrendingUp,
   AlertCircle,
   Repeat,
-  Bell
+  Bell,
+  Info
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 export const BudgetSuggestions = () => {
   const { data: transactions, isLoading } = useQuery({
@@ -81,6 +85,9 @@ export const BudgetSuggestions = () => {
         } by ${Math.abs(spendingChange).toFixed(1)}% compared to last month.`,
         icon: TrendingUp,
         action: "View Analysis",
+        explanation: "This insight is calculated by comparing your total spending this month " +
+          `($${currentMonthTotal.toFixed(2)}) with last month ($${lastMonthTotal.toFixed(2)}). ` +
+          "The percentage change helps you understand your spending trajectory."
       },
       {
         title: "Category Breakdown",
@@ -89,6 +96,8 @@ export const BudgetSuggestions = () => {
         }.`,
         icon: Repeat,
         action: "View Categories",
+        explanation: "We analyzed your transactions by category and identified the category " +
+          "with the highest total spending. This helps you understand where most of your money goes."
       },
       {
         title: "Recent Transactions Alert",
@@ -97,12 +106,16 @@ export const BudgetSuggestions = () => {
         } transactions this month totaling $${currentMonthTotal.toFixed(2)}.`,
         icon: AlertCircle,
         action: "View Details",
+        explanation: "This insight counts your transactions from the current month and sums up " +
+          "their total value to give you a quick overview of your monthly activity."
       },
       {
         title: "Budget Recommendations",
         description: "Set up custom budget alerts to track your spending in real-time.",
         icon: Bell,
         action: "Set Alerts",
+        explanation: "Based on your transaction patterns and spending categories, " +
+          "we recommend setting up alerts to help you stay within your budget goals."
       }
     ];
 
@@ -142,10 +155,25 @@ export const BudgetSuggestions = () => {
               <div className="flex-1 space-y-2">
                 <h3 className="text-lg font-semibold">{suggestion.title}</h3>
                 <p className="text-muted-foreground text-sm">{suggestion.description}</p>
-                <Button variant="ghost" className="w-full justify-between mt-4">
-                  {suggestion.action}
-                  <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Button variant="ghost" className="w-full justify-between mt-4">
+                      <span className="flex items-center">
+                        <Info className="mr-2 h-4 w-4" />
+                        How was this calculated?
+                      </span>
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </HoverCardTrigger>
+                  <HoverCardContent className="w-80">
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-semibold">AI Insight Explanation</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {suggestion.explanation}
+                      </p>
+                    </div>
+                  </HoverCardContent>
+                </HoverCard>
               </div>
             </div>
           </Card>
