@@ -17,8 +17,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
-          <Route path="/signin" element={<Auth type="signin" />} />
-          <Route path="/signup" element={<Auth type="signup" />} />
+          <Route path="/signin" element={<Auth authType="signin" />} />
+          <Route path="/signup" element={<Auth authType="signup" />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/budget" element={<Budget />} />
           <Route path="/investment" element={<Investment />} />
