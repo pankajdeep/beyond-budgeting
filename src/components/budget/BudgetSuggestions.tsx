@@ -16,6 +16,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { formatCurrency } from "@/lib/utils";
 
 export const BudgetSuggestions = () => {
   const { data: transactions, isLoading } = useQuery({
@@ -76,6 +77,11 @@ export const BudgetSuggestions = () => {
 
     const spendingChange = ((currentMonthTotal - lastMonthTotal) / lastMonthTotal) * 100;
 
+    // Get top 3 transactions by amount for examples
+    const topTransactions = [...transactions]
+      .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount))
+      .slice(0, 3);
+
     // Generate insights based on the analysis
     const insights = [
       {
@@ -85,9 +91,12 @@ export const BudgetSuggestions = () => {
         } by ${Math.abs(spendingChange).toFixed(1)}% compared to last month.`,
         icon: TrendingUp,
         action: "View Analysis",
-        explanation: "This insight is calculated by comparing your total spending this month " +
-          `($${currentMonthTotal.toFixed(2)}) with last month ($${lastMonthTotal.toFixed(2)}). ` +
-          "The percentage change helps you understand your spending trajectory."
+        explanation: `This month's spending (${formatCurrency(currentMonthTotal)}) compared to last month (${formatCurrency(lastMonthTotal)}) shows a ${Math.abs(spendingChange).toFixed(1)}% ${spendingChange > 0 ? "increase" : "decrease"}.\n\nLargest transactions this month:\n${
+          currentMonthTransactions
+            .slice(0, 3)
+            .map(t => `• ${t.description || "Unknown"}: ${formatCurrency(t.amount)}`)
+            .join("\n")
+        }`
       },
       {
         title: "Category Breakdown",
@@ -96,26 +105,38 @@ export const BudgetSuggestions = () => {
         }.`,
         icon: Repeat,
         action: "View Categories",
-        explanation: "We analyzed your transactions by category and identified the category " +
-          "with the highest total spending. This helps you understand where most of your money goes."
+        explanation: `Category spending breakdown:\n${
+          Object.entries(categoryTotals)
+            .sort((a, b) => b[1] - a[1])
+            .map(([category, amount]) => `• ${category}: ${formatCurrency(amount)}`)
+            .join("\n")
+        }\n\nThis analysis is based on ${transactions.length} total transactions.`
       },
       {
         title: "Recent Transactions Alert",
         description: `You have ${
           currentMonthTransactions.length
-        } transactions this month totaling $${currentMonthTotal.toFixed(2)}.`,
+        } transactions this month totaling ${formatCurrency(currentMonthTotal)}.`,
         icon: AlertCircle,
         action: "View Details",
-        explanation: "This insight counts your transactions from the current month and sums up " +
-          "their total value to give you a quick overview of your monthly activity."
+        explanation: `Recent transaction examples:\n${
+          topTransactions
+            .map(t => `• ${t.description || "Unknown"} (${t.category || "Uncategorized"}): ${formatCurrency(t.amount)}`)
+            .join("\n")
+        }\n\nTotal transactions this month: ${currentMonthTransactions.length}`
       },
       {
         title: "Budget Recommendations",
         description: "Set up custom budget alerts to track your spending in real-time.",
         icon: Bell,
         action: "Set Alerts",
-        explanation: "Based on your transaction patterns and spending categories, " +
-          "we recommend setting up alerts to help you stay within your budget goals."
+        explanation: `Based on your spending patterns:\n\nHighest spending categories:\n${
+          Object.entries(categoryTotals)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 3)
+            .map(([category, amount]) => `• ${category}: ${formatCurrency(amount)} (${((amount / currentMonthTotal) * 100).toFixed(1)}% of total)`)
+            .join("\n")
+        }\n\nRecommended monthly budget caps based on your history.`
       }
     ];
 
@@ -165,10 +186,15 @@ export const BudgetSuggestions = () => {
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   </HoverCardTrigger>
-                  <HoverCardContent className="w-80">
+                  <HoverCardContent 
+                    className="w-80 z-50" 
+                    side="top" 
+                    align="start"
+                    sideOffset={5}
+                  >
                     <div className="space-y-2">
                       <h4 className="text-sm font-semibold">AI Insight Explanation</h4>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground whitespace-pre-line">
                         {suggestion.explanation}
                       </p>
                     </div>
