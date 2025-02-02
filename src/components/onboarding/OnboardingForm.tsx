@@ -42,28 +42,8 @@ export const OnboardingForm = () => {
         return;
       }
 
-      const { error } = await supabase
-        .from('user_onboarding')
-        .insert({
-          user_id: session.user.id,
-          financial_goals: answers.financialGoals,
-          risk_tolerance: answers.riskTolerance,
-          investment_horizon: answers.investmentHorizon,
-          monthly_income: parseFloat(answers.monthlyIncome) || 0,
-          monthly_expenses: parseFloat(answers.monthlyExpenses) || 0,
-        });
-
-      if (error) {
-        console.error("Error updating onboarding:", error);
-        toast({
-          title: "Error",
-          description: "Failed to save onboarding data. Please try again.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      console.log("Onboarding completed successfully");
+      // Since we're not storing financial data anymore, just redirect to dashboard
+      console.log("Onboarding completed");
       toast({
         title: "Profile completed!",
         description: "Welcome to your financial wellness journey.",
