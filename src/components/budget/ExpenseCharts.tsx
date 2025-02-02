@@ -27,6 +27,7 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
   const { data: transactions = [], isLoading } = useQuery({
     queryKey: ['transactions', timeframe],
     queryFn: async () => {
+      console.log('Fetching transactions...');
       const { data, error } = await supabase
         .from('user_transactions')
         .select('*')
@@ -37,22 +38,32 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
         throw error;
       }
 
+      console.log('Fetched transactions:', data);
       return data || [];
     }
   });
 
+  // Initialize categoryData with an empty object
   const categoryData = transactions.reduce<Record<string, number>>((acc, transaction) => {
-    if (transaction.category) {
-      acc[transaction.category] = (acc[transaction.category] || 0) + Math.abs(Number(transaction.amount));
+    // Ensure transaction and category exist before processing
+    if (transaction?.category) {
+      const amount = Math.abs(Number(transaction.amount) || 0);
+      acc[transaction.category] = (acc[transaction.category] || 0) + amount;
+      console.log(`Processing category ${transaction.category}: ${amount}`);
     }
     return acc;
   }, {});
 
-  const threeDChartData = Object.entries(categoryData).map(([name, value], index) => ({
+  console.log('Processed category data:', categoryData);
+
+  // Transform data for 3D chart with validation
+  const threeDChartData = Object.entries(categoryData || {}).map(([name, value], index) => ({
     name,
-    value: Number(value),
+    value: Number(value) || 0,
     color: COLORS[index % COLORS.length]
   }));
+
+  console.log('3D chart data:', threeDChartData);
 
   const trendData = [
     { name: "Jan", amount: 2500 },
@@ -68,11 +79,12 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
   }
 
   const handleCategoryClick = (category: string) => {
+    console.log('Category clicked:', category);
     setSelectedCategory(category === selectedCategory ? null : category);
   };
 
   const filteredTransactions = selectedCategory
-    ? transactions.filter(t => t.category === selectedCategory)
+    ? transactions.filter(t => t?.category === selectedCategory)
     : [];
 
   return (
@@ -92,7 +104,7 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
                   key={transaction.transaction_id}
                   className="flex justify-between items-center p-2 bg-secondary/5 rounded-lg"
                 >
-                  <span>{transaction.description}</span>
+                  <span>{transaction.description || 'Unnamed Transaction'}</span>
                   <span className="font-medium">{formatCurrency(transaction.amount)}</span>
                 </div>
               ))}

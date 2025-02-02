@@ -16,23 +16,29 @@ interface ThreeDChartProps {
 }
 
 const SpendingShape = ({ data, onCategoryClick }: ThreeDChartProps) => {
-  const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   
   if (!data || data.length === 0) {
+    console.log('No data available for SpendingShape');
     return null;
   }
 
-  const totalValue = data.reduce((sum, item) => sum + item.value, 0);
+  const totalValue = data.reduce((sum, item) => sum + (Number(item.value) || 0), 0);
   
+  if (totalValue <= 0) {
+    console.log('Total value is 0 or negative');
+    return null;
+  }
+
   const segments = data.map((item, index) => {
-    const angle = (item.value / totalValue) * Math.PI * 2;
+    const value = Number(item.value) || 0;
+    const angle = (value / totalValue) * Math.PI * 2;
     return {
       ...item,
       angle,
       startAngle: index === 0 ? 0 : data
         .slice(0, index)
-        .reduce((sum, prev) => sum + (prev.value / totalValue) * Math.PI * 2, 0),
+        .reduce((sum, prev) => sum + ((Number(prev.value) || 0) / totalValue) * Math.PI * 2, 0),
     };
   });
 
@@ -103,6 +109,8 @@ const SpendingShape = ({ data, onCategoryClick }: ThreeDChartProps) => {
 };
 
 export const ThreeDChart = ({ data, onCategoryClick }: ThreeDChartProps) => {
+  console.log('ThreeDChart received data:', data);
+
   if (!data || data.length === 0) {
     return <div className="h-[400px] w-full flex items-center justify-center">No data available</div>;
   }
