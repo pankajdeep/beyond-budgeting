@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { useNavigate, Link } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 export const SignInForm = () => {
@@ -12,19 +12,38 @@ export const SignInForm = () => {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading) return;
+
     try {
+      setIsLoading(true);
       console.log("Attempting to sign in...");
       const { error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message === "Invalid login credentials") {
+          toast({
+            title: "Sign in failed",
+            description: "Please check your email and password, or sign up if you don't have an account.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error signing in",
+            description: error.message,
+            variant: "destructive",
+          });
+        }
+        return;
+      }
 
       toast({
         title: "Successfully signed in!",
@@ -35,9 +54,11 @@ export const SignInForm = () => {
       console.error("Sign in error:", error);
       toast({
         title: "Error signing in",
-        description: error.message,
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -61,6 +82,7 @@ export const SignInForm = () => {
               setFormData({ ...formData, email: e.target.value })
             }
             required
+            disabled={isLoading}
           />
         </div>
         <div className="space-y-2">
@@ -73,18 +95,24 @@ export const SignInForm = () => {
               setFormData({ ...formData, password: e.target.value })
             }
             required
+            disabled={isLoading}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Sign In
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? "Signing in..." : "Sign In"}
         </Button>
       </form>
-      <p className="text-center text-sm text-muted-foreground">
-        Don't have an account?{" "}
-        <a href="/signup" className="text-primary hover:underline">
-          Sign up
-        </a>
-      </p>
+      <div className="space-y-2 text-center text-sm text-muted-foreground">
+        <p>
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-primary hover:underline">
+            Sign up
+          </Link>
+        </p>
+        <p className="text-xs">
+          Make sure you've verified your email address if you've just signed up.
+        </p>
+      </div>
     </Card>
   );
 };
