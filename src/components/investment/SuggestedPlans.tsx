@@ -12,7 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Coins, Clock, TrendingUp, AlertTriangle, ExternalLink, Shield, Scale, Fire, ArrowRight, ArrowUpRight, ArrowDownLeft } from "lucide-react";
+import { Coins, Clock, TrendingUp, AlertTriangle, ExternalLink, Shield, Scale, Flame, ArrowRight, ArrowUpRight, ArrowDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const plans = [
@@ -101,7 +101,7 @@ export const SuggestedPlans = () => {
                 <div className="flex items-center gap-2 text-sm">
                   {plan.risk === "Low" && <Shield className="h-4 w-4 text-green-500" />}
                   {plan.risk === "Moderate" && <Scale className="h-4 w-4 text-yellow-500" />}
-                  {plan.risk === "High" && <Fire className="h-4 w-4 text-red-500" />}
+                  {plan.risk === "High" && <Flame className="h-4 w-4 text-red-500" />}
                   <span>Risk Tolerance: {plan.risk}</span>
                 </div>
 
