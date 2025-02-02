@@ -12,7 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Coins, Clock, TrendingUp, AlertTriangle, ExternalLink } from "lucide-react";
+import { Coins, Clock, TrendingUp, AlertTriangle, ExternalLink, Shield, Scale, Fire, ArrowRight, ArrowUpRight, ArrowDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const plans = [
@@ -20,6 +20,7 @@ const plans = [
     name: "SunFlex Retirement",
     risk: "Low",
     growth: "3-5%",
+    growthProfile: "Conservative",
     duration: "5+ years",
     description: "Guaranteed retirement income with protection against market downturns",
     provider: "SunLife",
@@ -36,6 +37,7 @@ const plans = [
     name: "Sun Life Granite Balanced Portfolio",
     risk: "Moderate",
     growth: "6-8%",
+    growthProfile: "Balanced",
     duration: "7-10 years",
     description: "Diversified portfolio balancing growth potential with downside protection",
     provider: "SunLife",
@@ -52,6 +54,7 @@ const plans = [
     name: "Sun Life MFS Global Growth Fund",
     risk: "High",
     growth: "8-12%",
+    growthProfile: "Aggressive",
     duration: "10+ years",
     description: "Aggressive growth through global equity investments",
     provider: "SunLife",
@@ -93,7 +96,23 @@ export const SuggestedPlans = () => {
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-2">
+              <div className="space-y-4">
+                {/* Risk Tolerance Section */}
+                <div className="flex items-center gap-2 text-sm">
+                  {plan.risk === "Low" && <Shield className="h-4 w-4 text-green-500" />}
+                  {plan.risk === "Moderate" && <Scale className="h-4 w-4 text-yellow-500" />}
+                  {plan.risk === "High" && <Fire className="h-4 w-4 text-red-500" />}
+                  <span>Risk Tolerance: {plan.risk}</span>
+                </div>
+
+                {/* Growth Profile Section */}
+                <div className="flex items-center gap-2 text-sm">
+                  {plan.growthProfile === "Conservative" && <ArrowDownLeft className="h-4 w-4 text-blue-500" />}
+                  {plan.growthProfile === "Balanced" && <ArrowRight className="h-4 w-4 text-yellow-500" />}
+                  {plan.growthProfile === "Aggressive" && <ArrowUpRight className="h-4 w-4 text-red-500" />}
+                  <span>Growth Profile: {plan.growthProfile}</span>
+                </div>
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
