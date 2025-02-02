@@ -83,8 +83,17 @@ const Dashboard = () => {
         throw error;
       }
 
-      console.log("Transactions data:", data);
-      return data;
+      // Map the data to match the Transaction type
+      const mappedTransactions = data?.map(transaction => ({
+        amount: transaction.amount,
+        transaction_type: transaction.transaction_type,
+        date: transaction.transaction_date, // Map transaction_date to date
+        category: transaction.category,
+        description: transaction.description
+      }));
+
+      console.log("Transactions data:", mappedTransactions);
+      return mappedTransactions;
     },
   });
 
