@@ -7,7 +7,8 @@ import {
   AlertCircle,
   Repeat,
   Bell,
-  Info
+  Info,
+  RefreshCw
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
@@ -17,9 +18,11 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { formatCurrency } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
 
 export const BudgetSuggestions = () => {
-  const { data: transactions, isLoading } = useQuery({
+  const { toast } = useToast();
+  const { data: transactions, isLoading, refetch, isFetching } = useQuery({
     queryKey: ["user-transactions"],
     queryFn: async () => {
       console.log("Fetching user transactions for budget insights");
@@ -143,6 +146,24 @@ export const BudgetSuggestions = () => {
     return insights;
   };
 
+  const handleRefresh = async () => {
+    console.log("Refreshing insights...");
+    try {
+      await refetch();
+      toast({
+        title: "Insights Refreshed",
+        description: "Your financial insights have been updated with the latest data.",
+      });
+    } catch (error) {
+      console.error("Error refreshing insights:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to refresh insights. Please try again.",
+      });
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -156,9 +177,23 @@ export const BudgetSuggestions = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-end">
-        <Button variant="outline" size="sm">
-          Refresh Insights
-          <ChevronRight className="ml-2 h-4 w-4" />
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={handleRefresh}
+          disabled={isFetching}
+        >
+          {isFetching ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Refreshing...
+            </>
+          ) : (
+            <>
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Refresh Insights
+            </>
+          )}
         </Button>
       </div>
       
