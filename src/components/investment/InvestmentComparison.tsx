@@ -18,7 +18,7 @@ const investmentTypes = [
     roi: "4-6%",
     liquidity: "Medium",
     growth: "Low",
-    description: "Conservative mix of fixed income and equity investments for stable returns",
+    description: "Conservative portfolio for stable returns",
   },
   {
     type: "Sun Life Granite Balanced Portfolio",
@@ -26,7 +26,7 @@ const investmentTypes = [
     roi: "6-8%",
     liquidity: "Medium",
     growth: "Medium",
-    description: "Balanced mix of Canadian and global investments for moderate growth",
+    description: "Balanced mix for moderate growth",
   },
   {
     type: "Sun Life MFS Global Growth Fund",
@@ -34,7 +34,7 @@ const investmentTypes = [
     roi: "8-12%",
     liquidity: "Medium",
     growth: "High",
-    description: "Global equity fund focused on long-term capital appreciation",
+    description: "Global equity for capital growth",
   },
   {
     type: "Sun Life Money Market Fund",
@@ -42,7 +42,7 @@ const investmentTypes = [
     roi: "2-3%",
     liquidity: "High",
     growth: "Low",
-    description: "High-quality money market instruments for capital preservation",
+    description: "Money market for capital preservation",
   },
   {
     type: "Sun Life Global Dividend Fund",
@@ -50,7 +50,7 @@ const investmentTypes = [
     roi: "6-8%",
     liquidity: "Medium",
     growth: "Medium",
-    description: "Global dividend-paying equities for income and growth",
+    description: "Global dividend equities for income",
   },
 ];
 
@@ -68,6 +68,10 @@ export const InvestmentComparison = () => {
     );
   };
 
+  const getMetricDisplay = (metric: MetricType) => {
+    return metric === "roi" ? "ROI" : metric.charAt(0).toUpperCase() + metric.slice(1);
+  };
+
   return (
     <div className="space-y-6 animate-fadeIn delay-300">
       <div className="flex items-center gap-2">
@@ -83,7 +87,7 @@ export const InvestmentComparison = () => {
             onPressedChange={() => toggleMetric(metric)}
             className="capitalize"
           >
-            {metric}
+            {getMetricDisplay(metric)}
           </Toggle>
         ))}
       </div>
@@ -92,13 +96,13 @@ export const InvestmentComparison = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Type</TableHead>
+              <TableHead className="w-1/4">Type</TableHead>
               {selectedMetrics.map((metric) => (
-                <TableHead key={metric} className="capitalize">
-                  {metric}
+                <TableHead key={metric} className="w-1/6">
+                  {getMetricDisplay(metric)}
                 </TableHead>
               ))}
-              <TableHead>Description</TableHead>
+              <TableHead className="w-1/4">Description</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -120,7 +124,9 @@ export const InvestmentComparison = () => {
                     </Badge>
                   </TableCell>
                 ))}
-                <TableCell>{investment.description}</TableCell>
+                <TableCell className="max-w-[200px] truncate">
+                  {investment.description}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
