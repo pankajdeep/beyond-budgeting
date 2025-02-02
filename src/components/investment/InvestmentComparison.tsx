@@ -85,7 +85,7 @@ export const InvestmentComparison = () => {
             key={metric}
             pressed={selectedMetrics.includes(metric)}
             onPressedChange={() => toggleMetric(metric)}
-            className="capitalize"
+            className="capitalize bg-secondary text-white hover:text-primary transition-colors"
           >
             {getMetricDisplay(metric)}
           </Toggle>
@@ -95,14 +95,14 @@ export const InvestmentComparison = () => {
       <div className="rounded-lg border">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-1/4">Type</TableHead>
+            <TableRow className="bg-secondary">
+              <TableHead className="w-1/4 text-primary font-semibold">Type</TableHead>
               {selectedMetrics.map((metric) => (
-                <TableHead key={metric} className="w-1/6">
+                <TableHead key={metric} className="w-1/6 text-primary font-semibold">
                   {getMetricDisplay(metric)}
                 </TableHead>
               ))}
-              <TableHead className="w-1/4">Description</TableHead>
+              <TableHead className="w-1/4 text-primary font-semibold">Description</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -119,6 +119,11 @@ export const InvestmentComparison = () => {
                           ? "secondary"
                           : "outline"
                       }
+                      className={`${
+                        investment[metric] === "High" || investment[metric] === "Medium"
+                          ? "text-white"
+                          : ""
+                      }`}
                     >
                       {investment[metric]}
                     </Badge>
