@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -20,7 +21,7 @@ export const OnboardingForm = () => {
   const { toast } = useToast();
 
   const handleNext = () => {
-    if (step < 3) {
+    if (step < 4) {
       setStep(step + 1);
     } else {
       handleSubmit();
@@ -165,6 +166,38 @@ export const OnboardingForm = () => {
             </RadioGroup>
           </div>
         );
+      case 4:
+        return (
+          <div className="space-y-4 animate-fadeIn">
+            <h2 className="text-xl font-semibold">Monthly Finances</h2>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="monthlyIncome">Monthly Income ($)</Label>
+                <Input
+                  id="monthlyIncome"
+                  type="number"
+                  value={answers.monthlyIncome}
+                  onChange={(e) =>
+                    setAnswers({ ...answers, monthlyIncome: e.target.value })
+                  }
+                  placeholder="Enter your monthly income"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="monthlyExpenses">Monthly Expenses ($)</Label>
+                <Input
+                  id="monthlyExpenses"
+                  type="number"
+                  value={answers.monthlyExpenses}
+                  onChange={(e) =>
+                    setAnswers({ ...answers, monthlyExpenses: e.target.value })
+                  }
+                  placeholder="Enter your monthly expenses"
+                />
+              </div>
+            </div>
+          </div>
+        );
       default:
         return null;
     }
@@ -179,7 +212,7 @@ export const OnboardingForm = () => {
         </p>
       </div>
       <div className="flex justify-center space-x-2 mb-6">
-        {[1, 2, 3].map((i) => (
+        {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
             className={`w-3 h-3 rounded-full ${
@@ -202,7 +235,7 @@ export const OnboardingForm = () => {
           onClick={handleNext}
           className={step === 1 ? "w-full" : ""}
         >
-          {step === 3 ? "Complete" : "Next"}
+          {step === 4 ? "Complete" : "Next"}
         </Button>
       </div>
     </Card>
