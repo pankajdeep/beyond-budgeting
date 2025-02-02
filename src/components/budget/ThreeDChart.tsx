@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { formatCurrency } from '@/lib/utils';
@@ -19,13 +19,12 @@ const SpendingShape = ({ data, onCategoryClick }: ThreeDChartProps) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.001;
-    }
-  });
+  if (!data || data.length === 0) {
+    return null;
+  }
 
   const totalValue = data.reduce((sum, item) => sum + item.value, 0);
+  
   const segments = data.map((item, index) => {
     const angle = (item.value / totalValue) * Math.PI * 2;
     return {
@@ -41,7 +40,7 @@ const SpendingShape = ({ data, onCategoryClick }: ThreeDChartProps) => {
     <group>
       {segments.map((segment, index) => {
         const radius = 2;
-        const height = (segment.value / totalValue) * 2 + 0.5;
+        const height = segment.value > 0 ? (segment.value / totalValue) * 2 + 0.5 : 0.5;
         const segments = 32;
         
         const shape = new THREE.Shape();
@@ -61,14 +60,18 @@ const SpendingShape = ({ data, onCategoryClick }: ThreeDChartProps) => {
         return (
           <mesh
             key={index}
-            ref={meshRef}
             position={[0, 0, 0]}
             onPointerOver={(e) => {
               e.stopPropagation();
               setHovered(segment.name);
             }}
             onPointerOut={() => setHovered(null)}
-            onClick={() => onCategoryClick?.(segment.name)}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onCategoryClick) {
+                onCategoryClick(segment.name);
+              }
+            }}
           >
             <extrudeGeometry args={[shape, extrudeSettings]} />
             <meshPhongMaterial
@@ -100,6 +103,10 @@ const SpendingShape = ({ data, onCategoryClick }: ThreeDChartProps) => {
 };
 
 export const ThreeDChart = ({ data, onCategoryClick }: ThreeDChartProps) => {
+  if (!data || data.length === 0) {
+    return <div className="h-[400px] w-full flex items-center justify-center">No data available</div>;
+  }
+
   return (
     <div className="h-[400px] w-full">
       <Canvas

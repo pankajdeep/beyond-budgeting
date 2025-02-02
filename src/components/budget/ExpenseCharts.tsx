@@ -11,23 +11,23 @@ interface ExpenseChartsProps {
 }
 
 const COLORS = [
-  "#FF6B6B", // Coral Red
-  "#4ECDC4", // Turquoise
-  "#45B7D1", // Sky Blue
-  "#96CEB4", // Sage Green
-  "#FFEEAD", // Cream Yellow
-  "#D4A5A5", // Dusty Rose
-  "#9A8194", // Muted Purple
-  "#A3CBB7", // Mint Green
+  "#FF6B6B",
+  "#4ECDC4",
+  "#45B7D1",
+  "#96CEB4",
+  "#FFEEAD",
+  "#D4A5A5",
+  "#9A8194",
+  "#A3CBB7",
 ];
 
 export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const { data: transactions, isLoading } = useQuery({
+  const { data: transactions = [], isLoading } = useQuery({
     queryKey: ['transactions', timeframe],
     queryFn: async () => {
-      const { data: userTransactions, error } = await supabase
+      const { data, error } = await supabase
         .from('user_transactions')
         .select('*')
         .order('transaction_date', { ascending: false });
@@ -37,23 +37,22 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
         throw error;
       }
 
-      return userTransactions;
+      return data || [];
     }
   });
 
-  const categoryData = transactions?.reduce((acc: Record<string, number>, transaction) => {
+  const categoryData = transactions.reduce<Record<string, number>>((acc, transaction) => {
     if (transaction.category) {
-      acc[transaction.category] = (acc[transaction.category] || 0) + Math.abs(transaction.amount);
+      acc[transaction.category] = (acc[transaction.category] || 0) + Math.abs(Number(transaction.amount));
     }
     return acc;
   }, {});
 
-  const threeDChartData = categoryData ? 
-    Object.entries(categoryData).map(([name, value], index) => ({
-      name,
-      value: Number(value),
-      color: COLORS[index % COLORS.length]
-    })) : [];
+  const threeDChartData = Object.entries(categoryData).map(([name, value], index) => ({
+    name,
+    value: Number(value),
+    color: COLORS[index % COLORS.length]
+  }));
 
   const trendData = [
     { name: "Jan", amount: 2500 },
@@ -73,7 +72,7 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
   };
 
   const filteredTransactions = selectedCategory
-    ? transactions?.filter(t => t.category === selectedCategory)
+    ? transactions.filter(t => t.category === selectedCategory)
     : [];
 
   return (
