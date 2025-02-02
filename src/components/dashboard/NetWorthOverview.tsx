@@ -13,7 +13,7 @@ interface NetWorthOverviewProps {
 }
 
 export const NetWorthOverview = ({ accounts }: NetWorthOverviewProps) => {
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+  const COLORS = ['#FFCD00', '#FFD700', '#FDE68A', '#FCD34D', '#8884d8'];
 
   const data = accounts.map(account => ({
     name: account.account_type,
@@ -23,11 +23,11 @@ export const NetWorthOverview = ({ accounts }: NetWorthOverviewProps) => {
   const totalNetWorth = accounts.reduce((sum, account) => sum + account.balance, 0);
 
   return (
-    <Card className="p-6 animate-fadeIn">
+    <Card className="p-6 animate-fadeIn bg-white/10 backdrop-blur-lg border border-white/20">
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-semibold">Net Worth Overview</h3>
-          <p className="text-3xl font-bold mt-2">{formatCurrency(totalNetWorth)}</p>
+          <h3 className="text-lg font-semibold text-primary">Net Worth Overview</h3>
+          <p className="text-3xl font-bold text-white mt-2">{formatCurrency(totalNetWorth)}</p>
         </div>
 
         <div className="h-[300px]">
@@ -49,6 +49,7 @@ export const NetWorthOverview = ({ accounts }: NetWorthOverviewProps) => {
               </Pie>
               <Tooltip 
                 formatter={(value: number) => formatCurrency(value)}
+                contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255, 255, 255, 0.2)' }}
               />
               <Legend />
             </PieChart>
