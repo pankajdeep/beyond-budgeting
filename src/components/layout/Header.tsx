@@ -19,7 +19,6 @@ export const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-  const [isOpen, setIsOpen] = useState(false);
 
   const { data: profile } = useQuery({
     queryKey: ["profile"],
@@ -75,7 +74,11 @@ export const Header = () => {
         <div className="flex items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative h-10 w-10 rounded-full">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="relative h-10 w-10 rounded-full hover:bg-accent"
+              >
                 <Menu className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
@@ -87,7 +90,7 @@ export const Header = () => {
                 <DropdownMenuItem
                   key={item.path}
                   className={cn(
-                    "cursor-pointer",
+                    "cursor-pointer transition-colors",
                     location.pathname === item.path &&
                       "bg-accent text-accent-foreground"
                   )}
@@ -104,14 +107,14 @@ export const Header = () => {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-accent">
               <Avatar className="h-10 w-10">
                 <AvatarImage src="/placeholder.svg" />
                 <AvatarFallback>{profile?.full_name?.charAt(0) || "U"}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end">
+          <DropdownMenuContent className="w-56 animate-in fade-in-0 zoom-in-95" align="end">
             <DropdownMenuItem onClick={() => navigate("/profile")}>
               <User className="mr-2 h-4 w-4" />
               Profile
