@@ -12,56 +12,58 @@ const Budget = () => {
   return (
     <>
       <Header />
-      <div className="container mx-auto px-4 py-8 space-y-8 animate-fadeIn mt-16">
-        <div className="space-y-2">
+      <div className="w-full px-4 py-8 space-y-8 animate-fadeIn mt-16">
+        <div className="max-w-[1400px] mx-auto space-y-2">
           <h1 className="text-4xl font-bold">Budget & Expenses</h1>
           <p className="text-muted-foreground">
             Track your spending and get personalized financial insights
           </p>
         </div>
 
-        <Tabs defaultValue="charts" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="charts">Expense Analysis</TabsTrigger>
-            <TabsTrigger value="suggestions">AI Suggestions</TabsTrigger>
-            <TabsTrigger value="products">Product Recommendations</TabsTrigger>
-          </TabsList>
+        <div className="max-w-[1400px] mx-auto">
+          <Tabs defaultValue="charts" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="charts">Expense Analysis</TabsTrigger>
+              <TabsTrigger value="suggestions">AI Suggestions</TabsTrigger>
+              <TabsTrigger value="products">Product Recommendations</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="charts" className="space-y-4">
-            <Card className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold">Expense Overview</h2>
-                <div className="flex gap-2">
-                  <TabsList>
-                    <TabsTrigger
-                      value="monthly"
-                      onClick={() => setTimeframe("monthly")}
-                      className={timeframe === "monthly" ? "bg-primary text-white" : ""}
-                    >
-                      Monthly
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="yearly"
-                      onClick={() => setTimeframe("yearly")}
-                      className={timeframe === "yearly" ? "bg-primary text-white" : ""}
-                    >
-                      Yearly
-                    </TabsTrigger>
-                  </TabsList>
+            <TabsContent value="charts" className="space-y-4">
+              <Card className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-semibold">Expense Overview</h2>
+                  <div className="flex gap-2">
+                    <TabsList>
+                      <TabsTrigger
+                        value="monthly"
+                        onClick={() => setTimeframe("monthly")}
+                        className={timeframe === "monthly" ? "bg-primary text-white" : ""}
+                      >
+                        Monthly
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="yearly"
+                        onClick={() => setTimeframe("yearly")}
+                        className={timeframe === "yearly" ? "bg-primary text-white" : ""}
+                      >
+                        Yearly
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
                 </div>
-              </div>
-              <ExpenseCharts timeframe={timeframe} />
-            </Card>
-          </TabsContent>
+                <ExpenseCharts timeframe={timeframe} />
+              </Card>
+            </TabsContent>
 
-          <TabsContent value="suggestions" className="space-y-4">
-            <BudgetSuggestions />
-          </TabsContent>
+            <TabsContent value="suggestions" className="space-y-4">
+              <BudgetSuggestions />
+            </TabsContent>
 
-          <TabsContent value="products" className="space-y-4">
-            <ProductRecommendations />
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="products" className="space-y-4">
+              <ProductRecommendations />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </>
   );

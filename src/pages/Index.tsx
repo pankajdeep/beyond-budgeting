@@ -53,9 +53,9 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#003366] text-white font-roboto">
+    <div className="min-h-screen w-full bg-[#003366] text-white font-roboto">
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center px-4 overflow-hidden">
+      <section className="relative min-h-[90vh] w-full flex items-center justify-center px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#003366] to-[#001830] opacity-90" />
         <div className="relative z-10 max-w-4xl mx-auto text-center animate-on-load">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fadeIn">
@@ -74,7 +74,7 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 w-full bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-[#003366] mb-12">
             Revolutionize Your Financial Journey
@@ -100,7 +100,7 @@ const Index = () => {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-20 bg-[#F5F5F5]">
+      <section className="py-20 w-full bg-[#F5F5F5]">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <Sun className="w-16 h-16 text-[#FFCD00] mx-auto mb-8" />
           <h2 className="text-3xl md:text-4xl font-bold text-[#003366] mb-8">
@@ -120,7 +120,7 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 w-full bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-[#003366] mb-12">
             What Our Users Say
@@ -148,7 +148,7 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#003366] text-white py-12">
+      <footer className="w-full bg-[#003366] text-white py-12">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>

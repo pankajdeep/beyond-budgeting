@@ -7,17 +7,19 @@ const FinancialLiteracy = () => {
   return (
     <>
       <Header />
-      <div className="container mx-auto px-4 py-8 space-y-8 mt-16">
-        <div className="space-y-2">
+      <div className="w-full px-4 py-8 space-y-8 mt-16">
+        <div className="max-w-[1400px] mx-auto space-y-2">
           <h1 className="text-4xl font-bold">Financial Literacy</h1>
           <p className="text-muted-foreground">
             Expand your financial knowledge with educational resources and expert insights
           </p>
         </div>
 
-        <SearchBar />
-        <EducationalContent />
-        <FAQSection />
+        <div className="max-w-[1400px] mx-auto">
+          <SearchBar />
+          <EducationalContent />
+          <FAQSection />
+        </div>
       </div>
     </>
   );
