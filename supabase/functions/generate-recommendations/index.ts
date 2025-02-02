@@ -85,22 +85,29 @@ serve(async (req) => {
 
     console.log('Sending request to OpenAI');
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4',
         messages: [
           { role: 'system', content: 'You are a knowledgeable financial advisor.' },
           { role: 'user', content: prompt }
         ],
+        temperature: 0.7,
+        max_tokens: 1000,
       }),
     });
 
-    const data = await response.json();
+    if (!openAIResponse.ok) {
+      console.error('OpenAI API error:', await openAIResponse.text());
+      throw new Error('Failed to get response from OpenAI');
+    }
+
+    const data = await openAIResponse.json();
     console.log('OpenAI response:', data);
 
     if (!data.choices?.[0]?.message?.content) {
@@ -108,7 +115,13 @@ serve(async (req) => {
       throw new Error('Invalid response from OpenAI');
     }
 
-    const recommendations = JSON.parse(data.choices[0].message.content);
+    let recommendations;
+    try {
+      recommendations = JSON.parse(data.choices[0].message.content);
+    } catch (error) {
+      console.error('Error parsing OpenAI response:', error);
+      throw new Error('Invalid JSON response from OpenAI');
+    }
 
     // Delete old recommendations
     const { error: deleteError } = await supabaseClient
