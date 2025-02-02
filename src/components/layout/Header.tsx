@@ -127,7 +127,7 @@ export const Header = () => {
             <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-accent">
               <Avatar className="h-10 w-10">
                 <AvatarImage 
-                  src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952" 
+                  src="https://images.unsplash.com/photo-1439337153520-7082a56a81f4"
                   alt="Profile picture"
                 />
                 <AvatarFallback>

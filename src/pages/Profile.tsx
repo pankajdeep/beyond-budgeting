@@ -56,7 +56,10 @@ const Profile = () => {
             <div className="flex items-center space-x-4">
               <div className="relative group">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src="/placeholder.svg" />
+                  <AvatarImage 
+                    src="https://images.unsplash.com/photo-1439337153520-7082a56a81f4"
+                    alt="Profile picture"
+                  />
                   <AvatarFallback>
                     {profile?.full_name?.charAt(0) || "U"}
                   </AvatarFallback>
