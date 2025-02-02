@@ -36,7 +36,7 @@ export const ProductRecommendations = () => {
       <CarouselContent>
         {products.map((product, index) => (
           <CarouselItem key={product.title}>
-            <Card className="p-6 animate-fadeIn" style={{ animationDelay: `${index * 100}ms` }}>
+            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary animate-fadeIn" style={{ animationDelay: `${index * 100}ms` }}>
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="p-3 bg-primary/10 rounded-full">
                   <product.icon className="h-8 w-8 text-primary" />
