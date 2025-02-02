@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { FinancialMetrics } from "@/components/dashboard/FinancialMetrics";
-import { RecommendationsList } from "@/components/recommendations/RecommendationsList";
-import { ChatWindow } from "@/components/chat/ChatWindow";
+import { FinancialSummary } from "@/components/dashboard/FinancialSummary";
+import { NetWorthOverview } from "@/components/dashboard/NetWorthOverview";
+import { RecentTransactions } from "@/components/dashboard/RecentTransactions";
+import { SpendingAnalysis } from "@/components/dashboard/SpendingAnalysis";
+import { FinancialGoals } from "@/components/dashboard/FinancialGoals";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
@@ -36,28 +38,56 @@ const Dashboard = () => {
     },
   });
 
-  const { data: bankAccounts, isLoading: isLoadingAccounts } = useQuery({
-    queryKey: ["bankAccounts"],
+  const { data: accounts, isLoading: isLoadingAccounts } = useQuery({
+    queryKey: ["userAccounts"],
     queryFn: async () => {
-      console.log("Fetching bank accounts...");
+      console.log("Fetching user accounts...");
+      const { data: { session } } = await supabase.auth.getSession();
+      
       const { data, error } = await supabase
-        .from("bank_accounts")
-        .select(`
-          *,
-          transactions(*)
-        `);
+        .from("user_accounts")
+        .select("*")
+        .eq("customer_id", session?.user.id);
 
       if (error) {
-        console.error("Error fetching bank accounts:", error);
+        console.error("Error fetching accounts:", error);
         throw error;
       }
 
-      console.log("Bank accounts data:", data);
+      console.log("Accounts data:", data);
       return data;
     },
   });
 
-  if (isLoadingProfile || isLoadingAccounts) {
+  const { data: transactions, isLoading: isLoadingTransactions } = useQuery({
+    queryKey: ["userTransactions"],
+    queryFn: async () => {
+      console.log("Fetching user transactions...");
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      const { data, error } = await supabase
+        .from("user_transactions")
+        .select(`
+          *,
+          user_accounts (
+            account_type,
+            account_number
+          )
+        `)
+        .order('transaction_date', { ascending: false })
+        .limit(50);
+
+      if (error) {
+        console.error("Error fetching transactions:", error);
+        throw error;
+      }
+
+      console.log("Transactions data:", data);
+      return data;
+    },
+  });
+
+  if (isLoadingProfile || isLoadingAccounts || isLoadingTransactions) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -74,21 +104,26 @@ const Dashboard = () => {
       <Header />
       <div className="container mx-auto px-4 py-8 space-y-8 mt-16">
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold">Welcome, {profile?.full_name}</h1>
+          <h1 className="text-4xl font-bold animate-fadeIn">
+            Welcome back, {profile?.full_name}
+          </h1>
           <p className="text-muted-foreground">
-            Track your progress and get personalized recommendations
+            Here's your financial overview
           </p>
         </div>
 
-        <FinancialMetrics
-          monthlyIncome={0}
-          monthlyExpenses={0}
-          bankAccounts={bankAccounts || []}
-        />
-
-        <RecommendationsList />
-
-        <ChatWindow />
+        <div className="grid gap-8">
+          <FinancialSummary accounts={accounts || []} />
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <NetWorthOverview accounts={accounts || []} />
+            <SpendingAnalysis transactions={transactions || []} />
+          </div>
+          
+          <RecentTransactions transactions={transactions || []} />
+          
+          <FinancialGoals />
+        </div>
       </div>
     </>
   );
