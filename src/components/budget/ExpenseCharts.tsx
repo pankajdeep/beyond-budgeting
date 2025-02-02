@@ -1,26 +1,17 @@
 import { Card } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { formatCurrency } from "@/lib/utils";
+import { ThreeDChart } from "./ThreeDChart";
+import { useTheme } from "next-themes";
 
 interface ExpenseChartsProps {
   timeframe: "monthly" | "yearly";
 }
 
-// Modern dark color palette for 3D effect
-const COLORS = [
-  "#1E293B", // Slate Dark
-  "#312E81", // Indigo Dark
-  "#3730A3", // Purple Dark
-  "#1F2937", // Cool Gray Dark
-  "#292524", // Warm Gray Dark
-  "#27272A", // Neutral Dark
-  "#1A1E1F", // Stone Dark
-  "#1E1B4B", // Deep Purple Dark
-];
-
 export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
+  const { theme } = useTheme();
   console.log("Fetching transaction data for timeframe:", timeframe);
 
   const { data: transactions, isLoading } = useQuery({
@@ -51,13 +42,13 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
     return acc;
   }, {});
 
+  const totalExpenses = Object.values(categoryData || {}).reduce((sum: any, value: any) => sum + value, 0);
+
   const pieChartData = categoryData ? Object.entries(categoryData).map(([name, value]) => ({
     name,
-    value: Number(value)
-  })).sort((a, b) => b.value - a.value) : []; // Sort by value for better visualization
-
-  // Calculate total expenses for percentage
-  const totalExpenses = pieChartData.reduce((sum, item) => sum + item.value, 0);
+    value: Number(value),
+    percentage: (Number(value) / totalExpenses) * 100
+  })).sort((a, b) => b.value - a.value) : [];
 
   console.log("Processed category data:", pieChartData);
 
@@ -75,65 +66,15 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
     return <div className="flex items-center justify-center h-[300px]">Loading charts...</div>;
   }
 
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      const percentage = ((data.value / totalExpenses) * 100).toFixed(1);
-      
-      return (
-        <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-2 rounded-lg border shadow-lg">
-          <p className="font-semibold">{data.name}</p>
-          <p className="text-sm text-muted-foreground">
-            Amount: {formatCurrency(data.value)}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {percentage}% of total expenses
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <Card className="p-6 animate-fadeIn delay-200">
         <h3 className="text-xl font-semibold mb-4">Category Breakdown</h3>
-        <div className="h-[300px] md:h-[400px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={pieChartData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, value }) => `${name}`}
-                outerRadius={({ viewBox }) => Math.min(viewBox?.width || 0, viewBox?.height || 0) / 3}
-                innerRadius={({ viewBox }) => (Math.min(viewBox?.width || 0, viewBox?.height || 0) / 3) * 0.6}
-                paddingAngle={4}
-                dataKey="value"
-              >
-                {pieChartData.map((entry: any, index: number) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={COLORS[index % COLORS.length]}
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth={2}
-                  />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                layout="vertical" 
-                align="right"
-                verticalAlign="middle"
-                formatter={(value, entry: any) => {
-                  const percentage = ((entry.payload.value / totalExpenses) * 100).toFixed(1);
-                  return `${value} (${percentage}%)`;
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="h-[400px]">
+          <ThreeDChart 
+            data={pieChartData}
+            isDarkMode={theme === 'dark'}
+          />
         </div>
       </Card>
 
@@ -141,7 +82,7 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
         <h3 className="text-xl font-semibold mb-4">
           {timeframe === "monthly" ? "Monthly" : "Yearly"} Trends
         </h3>
-        <div className="h-[300px] md:h-[400px]">
+        <div className="h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={trendData}>
               <XAxis dataKey="name" />
