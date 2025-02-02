@@ -8,14 +8,15 @@ interface ExpenseChartsProps {
   timeframe: "monthly" | "yearly";
 }
 
-// Darker, more appealing color palette
+// Updated color palette with darker, more appealing shades
 const COLORS = [
-  "#1A1F2C", // Dark Purple
-  "#7E69AB", // Secondary Purple
-  "#6E59A5", // Tertiary Purple
-  "#403E43", // Charcoal Gray
-  "#333333", // Dark Gray
-  "#222222", // Darker Gray
+  "#1A1F2C", // Deep Navy
+  "#403E43", // Dark Charcoal
+  "#2C3E50", // Midnight Blue
+  "#34495E", // Dark Slate
+  "#2E4053", // Deep Ocean
+  "#283747", // Dark Steel
+  "#212F3C", // Dark Gray (for Others)
 ];
 
 const fetchExpenseCategories = async () => {
@@ -41,11 +42,19 @@ const fetchExpenseCategories = async () => {
   // Convert to array and sort by amount
   const sortedCategories = Object.entries(categoryTotals)
     .map(([name, value]) => ({ name, value }))
-    .sort((a, b) => b.value - a.value)
-    .slice(0, 6); // Take top 6 categories
+    .sort((a, b) => b.value - a.value);
 
-  console.log("Processed expense categories:", sortedCategories);
-  return sortedCategories;
+  // Take top 6 categories and group the rest as "Others"
+  const topCategories = sortedCategories.slice(0, 6);
+  const otherCategories = sortedCategories.slice(6);
+  
+  if (otherCategories.length > 0) {
+    const othersSum = otherCategories.reduce((sum, cat) => sum + cat.value, 0);
+    topCategories.push({ name: "Others", value: othersSum });
+  }
+
+  console.log("Processed expense categories:", topCategories);
+  return topCategories;
 };
 
 export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
@@ -103,12 +112,16 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
                 outerRadius={80}
                 paddingAngle={5}
                 dataKey="value"
+                animationDuration={1000}
+                animationBegin={0}
               >
                 {categoryData.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`} 
                     fill={COLORS[index % COLORS.length]}
                     className="hover:opacity-80 transition-opacity duration-300"
+                    stroke="rgba(255,255,255,0.1)"
+                    strokeWidth={1}
                   />
                 ))}
               </Pie>
@@ -117,14 +130,22 @@ export const ExpenseCharts = ({ timeframe }: ExpenseChartsProps) => {
                 contentStyle={{
                   backgroundColor: 'rgba(0, 0, 0, 0.8)',
                   border: 'none',
-                  borderRadius: '4px',
-                  color: '#fff'
+                  borderRadius: '8px',
+                  padding: '8px 12px',
+                  color: '#fff',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                }}
+                labelStyle={{
+                  fontWeight: 'bold',
+                  marginBottom: '4px'
                 }}
               />
               <Legend 
                 verticalAlign="bottom" 
                 height={36}
-                formatter={(value) => <span className="text-sm">{value}</span>}
+                formatter={(value) => (
+                  <span className="text-sm font-medium">{value}</span>
+                )}
               />
             </PieChart>
           </ResponsiveContainer>
