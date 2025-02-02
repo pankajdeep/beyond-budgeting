@@ -37,12 +37,12 @@ export default {
           900: "#1B5E20",
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#FFCD00",
+          dark: "#FFD700",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#003366",
+          light: "#004080",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
