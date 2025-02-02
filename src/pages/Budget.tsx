@@ -18,12 +18,16 @@ import { supabase } from "@/integrations/supabase/client";
 const Budget = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>("");
 
-  const { data: accounts } = useQuery({
+  const { data: accounts, isLoading } = useQuery({
     queryKey: ['userAccounts'],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not found');
+
       const { data, error } = await supabase
         .from('user_accounts')
         .select('*')
+        .eq('customer_id', user.id);
       
       if (error) throw error;
       return data;
@@ -59,7 +63,7 @@ const Budget = () => {
                       onValueChange={setSelectedAccount}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select account" />
+                        <SelectValue placeholder={isLoading ? "Loading..." : "Select account"} />
                       </SelectTrigger>
                       <SelectContent>
                         {accounts?.map((account) => (
