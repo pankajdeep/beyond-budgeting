@@ -201,7 +201,7 @@ export const BudgetSuggestions = () => {
         {suggestions.map((suggestion, index) => (
           <Card
             key={suggestion.title}
-            className="p-6 hover:shadow-lg transition-shadow duration-200 animate-fadeIn"
+            className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary animate-fadeIn"
             style={{ animationDelay: `${index * 100}ms` }}
           >
             <div className="flex items-start space-x-4">
