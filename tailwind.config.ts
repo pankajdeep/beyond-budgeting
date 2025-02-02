@@ -41,8 +41,8 @@ export default {
           dark: "#FFD700",
         },
         secondary: {
-          DEFAULT: "#003366",
-          light: "#004080",
+          DEFAULT: "#FFFFFF",
+          light: "#F5F5F5",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",

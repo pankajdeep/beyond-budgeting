@@ -9,7 +9,6 @@ const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Animate elements on page load
     const elements = document.querySelectorAll('.animate-on-load');
     elements.forEach((element) => {
       element.classList.add('animate-fadeIn');
@@ -53,15 +52,15 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#003366] text-white font-roboto">
+    <div className="min-h-screen bg-white text-[#003366] font-roboto">
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#003366] to-[#001830] opacity-90" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-100 opacity-90" />
         <div className="relative z-10 max-w-4xl mx-auto text-center animate-on-load">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fadeIn">
             Empower Your Financial Future with AI
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-gray-200 animate-fadeIn delay-200">
+          <p className="text-xl md:text-2xl mb-8 text-[#003366]/80 animate-fadeIn delay-200">
             Smart budgeting, personalized investment guidance, and expert financial insights—all in one place.
           </p>
           <Button
@@ -83,11 +82,11 @@ const Index = () => {
             <CarouselContent>
               {features.map((feature, index) => (
                 <CarouselItem key={index} className="md:basis-1/3">
-                  <Card className="p-6 h-full bg-[#F5F5F5] border-none hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                  <Card className="p-6 h-full bg-gray-50 border-none hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <div className="flex flex-col items-center text-center">
                       <div className="mb-4">{feature.icon}</div>
                       <h3 className="text-xl font-semibold mb-2 text-[#003366]">{feature.title}</h3>
-                      <p className="text-gray-600">{feature.description}</p>
+                      <p className="text-[#003366]/70">{feature.description}</p>
                     </div>
                   </Card>
                 </CarouselItem>
@@ -100,7 +99,7 @@ const Index = () => {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-20 bg-[#F5F5F5]">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <Sun className="w-16 h-16 text-[#FFCD00] mx-auto mb-8" />
           <h2 className="text-3xl md:text-4xl font-bold text-[#003366] mb-8">
@@ -109,11 +108,11 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="p-6 bg-white rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
               <h3 className="text-xl font-semibold text-[#003366] mb-4">Advanced AI Technology</h3>
-              <p className="text-gray-600">Cutting-edge algorithms that learn and adapt to your financial patterns</p>
+              <p className="text-[#003366]/70">Cutting-edge algorithms that learn and adapt to your financial patterns</p>
             </div>
             <div className="p-6 bg-white rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
               <h3 className="text-xl font-semibold text-[#003366] mb-4">Personalized Insights</h3>
-              <p className="text-gray-600">Tailored recommendations based on your unique financial situation</p>
+              <p className="text-[#003366]/70">Tailored recommendations based on your unique financial situation</p>
             </div>
           </div>
         </div>
@@ -129,12 +128,12 @@ const Index = () => {
             <CarouselContent>
               {testimonials.map((testimonial, index) => (
                 <CarouselItem key={index} className="md:basis-1/2">
-                  <Card className="p-6 h-full bg-[#F5F5F5] border-none">
+                  <Card className="p-6 h-full bg-gray-50 border-none">
                     <div className="flex flex-col h-full">
-                      <p className="text-gray-600 mb-4 flex-grow">{testimonial.content}</p>
+                      <p className="text-[#003366]/70 mb-4 flex-grow">{testimonial.content}</p>
                       <div>
                         <p className="font-semibold text-[#003366]">{testimonial.name}</p>
-                        <p className="text-sm text-gray-500">{testimonial.role}</p>
+                        <p className="text-sm text-[#003366]/60">{testimonial.role}</p>
                       </div>
                     </div>
                   </Card>
@@ -148,7 +147,7 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#003366] text-white py-12">
+      <footer className="bg-white text-[#003366] py-12">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
@@ -176,7 +175,7 @@ const Index = () => {
               </ul>
             </div>
           </div>
-          <div className="text-center pt-8 border-t border-gray-700">
+          <div className="text-center pt-8 border-t border-gray-200">
             <p>&copy; 2024 Money Mindfully. All rights reserved.</p>
           </div>
         </div>
