@@ -83,19 +83,22 @@ const Dashboard = () => {
         throw error;
       }
 
-      // For SmartInsights component
-      const simplifiedTransactions = data?.map(transaction => ({
-        amount: transaction.amount,
-        transaction_type: transaction.transaction_type,
-        date: transaction.transaction_date,
-        category: transaction.category,
-        description: transaction.description
-      }));
-
       console.log("Transactions data:", data);
       return data;
     },
   });
+
+  // Create simplified transactions for SmartInsights
+  const simplifiedTransactions = transactions?.map(transaction => ({
+    amount: transaction.amount,
+    transaction_type: transaction.transaction_type,
+    date: transaction.transaction_date,
+    category: transaction.category,
+    description: transaction.description,
+    transaction_id: transaction.transaction_id,
+    transaction_date: transaction.transaction_date,
+    user_accounts: transaction.user_accounts
+  })) || [];
 
   if (isLoadingProfile || isLoadingAccounts || isLoadingTransactions) {
     return (
@@ -131,7 +134,7 @@ const Dashboard = () => {
           <FinancialSummary accounts={accounts || []} />
           
           <SmartInsights 
-            transactions={simplifiedTransactions || []} 
+            transactions={simplifiedTransactions} 
             monthlyIncome={monthlyIncome || 3000}
           />
           

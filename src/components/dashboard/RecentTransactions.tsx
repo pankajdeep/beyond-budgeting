@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 interface Transaction {
   transaction_id: string;
@@ -50,7 +50,7 @@ export const RecentTransactions = ({ transactions }: RecentTransactionsProps) =>
               {recentTransactions.map((transaction) => (
                 <TableRow key={transaction.transaction_id}>
                   <TableCell>
-                    {format(new Date(transaction.transaction_date), 'MMM d, yyyy')}
+                    {format(parseISO(transaction.transaction_date), 'MMM d, yyyy')}
                   </TableCell>
                   <TableCell>{transaction.description}</TableCell>
                   <TableCell>{transaction.category}</TableCell>
