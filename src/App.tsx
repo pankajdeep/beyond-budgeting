@@ -15,6 +15,7 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import { useEffect, useState } from "react";
 import { supabase } from "./integrations/supabase/client";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const queryClient = new QueryClient();
 
@@ -22,7 +23,6 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Check initial auth state
     supabase.auth.getSession().then(({ data: { session } }) => {
       setIsAuthenticated(!!session);
     });
@@ -47,8 +47,9 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <div className="flex min-h-screen w-full">
-            <Routes>
+          <SidebarProvider>
+            <div className="flex min-h-screen w-full">
+              <Routes>
               <Route
                 path="/"
                 element={
@@ -132,8 +133,9 @@ const App = () => {
               <Route path="/signin" element={<Auth />} />
               <Route path="/signup" element={<Auth />} />
               <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
+              </Routes>
+            </div>
+          </SidebarProvider>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

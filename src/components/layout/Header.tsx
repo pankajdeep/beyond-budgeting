@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Menu, User, Settings, LogOut, LayoutDashboard, BarChart, PiggyBank, BookOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { User, Settings, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,15 +8,15 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "./AppSidebar";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { toast } = useToast();
 
   const { data: profile } = useQuery({
@@ -44,29 +43,6 @@ export const Header = () => {
     },
   });
 
-  const menuItems = [
-    { 
-      label: "Dashboard", 
-      path: "/dashboard",
-      icon: LayoutDashboard 
-    },
-    { 
-      label: "Budget & Expense", 
-      path: "/budget",
-      icon: BarChart 
-    },
-    {
-      label: "Investment & Savings",
-      path: "/investment",
-      icon: PiggyBank
-    },
-    {
-      label: "Financial Literacy",
-      path: "/financial-literacy",
-      icon: BookOpen
-    },
-  ];
-
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
@@ -85,74 +61,47 @@ export const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+    <>
+      <AppSidebar />
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <SidebarTrigger />
+            <h1 className="text-xl font-bold">Money Mindfully</h1>
+          </div>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="relative h-10 w-10 rounded-full hover:bg-accent"
-              >
-                <Menu className="h-5 w-5" />
+              <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-accent">
+                <Avatar className="h-10 w-10">
+                  <AvatarImage 
+                    src="https://images.unsplash.com/photo-1439337153520-7082a56a81f4"
+                    alt="Profile picture"
+                  />
+                  <AvatarFallback>
+                    <User className="h-6 w-6 text-primary" />
+                  </AvatarFallback>
+                </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="start"
-              className="w-56 animate-in fade-in-0 zoom-in-95"
-            >
-              {menuItems.map((item) => (
-                <DropdownMenuItem
-                  key={item.path}
-                  className={cn(
-                    "cursor-pointer transition-colors flex items-center gap-2",
-                    location.pathname === item.path &&
-                      "bg-accent text-accent-foreground"
-                  )}
-                  onClick={() => navigate(item.path)}
-                >
-                  <item.icon className="h-4 w-4" />
-                  {item.label}
-                </DropdownMenuItem>
-              ))}
+            <DropdownMenuContent className="w-56 animate-in fade-in-0 zoom-in-95" align="end">
+              <DropdownMenuItem onClick={() => navigate("/profile")}>
+                <User className="mr-2 h-4 w-4" />
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/settings")}>
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <h1 className="text-xl font-bold">Money Mindfully</h1>
         </div>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-accent">
-              <Avatar className="h-10 w-10">
-                <AvatarImage 
-                  src="https://images.unsplash.com/photo-1439337153520-7082a56a81f4"
-                  alt="Profile picture"
-                />
-                <AvatarFallback>
-                  <User className="h-6 w-6 text-primary" />
-                </AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 animate-in fade-in-0 zoom-in-95" align="end">
-            <DropdownMenuItem onClick={() => navigate("/profile")}>
-              <User className="mr-2 h-4 w-4" />
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate("/settings")}>
-              <Settings className="mr-2 h-4 w-4" />
-              Settings
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </header>
+      </header>
+    </>
   );
 };
